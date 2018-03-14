@@ -1,0 +1,102 @@
+{
+	"JobName": "BEL_FSMA_Tra_Dev_Stat_DMZ",
+	"Enabled": "True",
+	"TriggerOnStart": "False",
+	"Cron": "*/1 * * * *",
+	"NcaIdentifier": "BE-FSMA",
+	"Pipe": [
+		{
+			"StepName": "WaitForResponse",
+      "StepSettings": {
+        "Type": "sftp",
+        "Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_IN",
+        "Host": "10.112.4.200",
+        "Port": 22,
+        "UserName": "ec2-user",
+        "PrivateKey": "/opt/Beamer/Release/Configuration/DEV/ImpendiumEmir2Migration.pem",
+        "FileMask": "A26MIFIR_*_{timestamp:yyyyMMddTHHmmss}_BE-FSMA*.XML",
+        "LocalBackupPath": "/home/beamer/FTP_Copy/Inbound/StatistiX/BE-FSMA",
+        "CreateFileMappingInMongo": "True"
+      }
+		},
+		{
+			"StepName": "GenerateSequence",
+			"StepSettings": {
+				"NameOfSequenceToken": "{SEQ:000000}",
+				"SequenceResetCron": "0 0 1 1 *",
+				"SequenceStart": 1
+			}
+		},
+		{
+			"StepName": "TokenRename",
+			"StepSettings": {
+				"InputFileMask": "A26MIFIR_{ENV:3}_{LEIS}_{inboundDate:yyyyMMddTHHmmss}_BE-FSMA_{PART:3}.XML",
+				"OutputFileMask": "BEAVE_DATTRATEST_BE_{SEQ:6}-0-000000_{currentDate:yy}.xml",
+				"InboundSettings": {
+
+				}
+			}
+		},
+		{
+			"StepName": "Envelope",
+			"StepSettings": {
+				"PathToEnvelopeFile": "/opt/Beamer/Release/Configuration/DEV/Envelope/Envelope.xml",
+				"VariableTokenInputFileNameMapping": "BEAVE_DATTRATEST_BE_{SEQ:6}-{VER:1}-{PREVSEQ:6}_{YEAR:yy}.xml",
+				"BusinessMessageIdentifier": "DRAFT12auth.016.001.01",
+				"ResultTokenNameValues": { "{BizMsgIdr}": "DRAFT12auth.016.001.01" },
+				"EnvelopePayloadXmlElement": "Pyld",
+				"EnvelopeXPathFillSettings": {
+					"/BizData/Hdr/AppHdr/BizMsgIdr": "DRAFT12auth.016.001.01",
+					"/BizData/Hdr/AppHdr/MsgDefIdr": "auth.016.001.01",
+					"/BizData/Hdr/AppHdr/To/OrgId/Id/OrgId/Othr/Id": "BE",
+					"/BizData/Hdr/AppHdr/CreDt": "{currentDate:yyyy-MM-ddTHH:mm:ssZ}"
+				}
+			}
+		},
+		{
+			"StepName": "LastAccepted",
+			"StepSettings": {
+				"BizMsgIdrToken": "BizMsgIdr",
+				"SequenceHolder": "SEQ",
+				"LastSequenceHolder": "PREVSEQ",
+				"Mask": "BEAVE_DATTRATEST_BE_{SEQ:6}-{VER:1}-{PREVSEQ:6}_{YEAR}",
+				"SequenceFormat": "000000",
+				"SequenceStart": 0,
+				"IgnoreSequencing": "False"
+			}
+		},
+		{
+			"StepName": "Zip",
+			"StepSettings": {
+				"AddExtension": "False"
+			}
+		},
+		{
+			"StepName": "To",
+			"StepSettings": {
+				"Type": "sftp",
+				"Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_OUT",
+				"Host": "10.112.4.200",
+				"UserName": "ec2-user",
+				"PrivateKey": "/opt/Beamer/Release/Configuration/DEV/ImpendiumEmir2Migration.pem",
+				"LocalBackupPath": "/home/beamer/FTP_Copy/Outbound/DMZ/BE-FSMA"
+			}
+		},
+		{
+			"StepName": "CreateSuffixFile",
+			"StepSettings": {
+				"Type": "sftp",
+				"Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_OUT",
+				"Host": "10.112.4.200",
+				"UserName": "ec2-user",
+				"PrivateKey": "/opt/Beamer/Release/Configuration/DEV/ImpendiumEmir2Migration.pem",
+				"SuccessFileUploadSuffix": "_0"
+			}
+		},
+		{
+			"StepName": "Delete",
+			"StepSettings": {
+			}
+		}
+	]
+}
