@@ -2,9 +2,9 @@
 
 namespace FileOps.Configuration.Entities
 {
-    public class Settings
+    internal class Settings
     {
-        public string JobName { get; set; }
+        public string Identifier { get; set; }
 
         public bool Enabled { get; set; }
 

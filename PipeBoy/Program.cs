@@ -19,7 +19,7 @@ namespace PipeBoy
             var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("settings.json");
-            var x = new ConfigurationFactory().Get<Settings>(new FileInfo("settings.json"));
+            //var x = new ConfigurationFactory().Get<Settings>(new FileInfo("settings.json"));
         }
     }
 }

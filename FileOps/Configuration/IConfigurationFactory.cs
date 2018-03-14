@@ -2,7 +2,7 @@
 
 namespace FileOps.Configuration
 {
-    public interface IConfigurationFactory
+    internal interface IConfigurationFactory
     {
         T Get<T>(FileInfo file);
     }
