@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Steps\From\" />
     <Folder Include="Steps\Custom\" />
     <Folder Include="Steps\GZip\" />
     <Folder Include="Steps\Envelope\" />
@@ -13,6 +12,10 @@
     <Folder Include="Steps\Decrypt\" />
     <Folder Include="Steps\GPGEncryptAndSign\" />
     <Folder Include="Steps\GPGDecryptAndVerify\" />
+    <Folder Include="Steps\LoadState\" />
+    <Folder Include="Steps\CreateSuffixFile\" />
+    <Folder Include="Steps\Filter\" />
+    <Folder Include="Steps\StoreState\" />
     <Folder Include="Steps\Sequence\" />
     <Folder Include="Steps\Verify\" />
     <Folder Include="Steps\Sign\" />
@@ -20,8 +23,6 @@
     <Folder Include="Steps\UnGZip\" />
     <Folder Include="Steps\UnZip\" />
     <Folder Include="Steps\Rename\" />
-    <Folder Include="Steps\Zip\" />
-    <Folder Include="Steps\To\" />
   </ItemGroup>
 
   <ItemGroup>

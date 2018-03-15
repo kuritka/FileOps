@@ -7,6 +7,7 @@ using System.Reflection;
 
 namespace FileOps.Pipe
 {
+    
     internal class StepFactory : IStepFactory
     {
 
@@ -19,7 +20,7 @@ namespace FileOps.Pipe
                 .Where(type => type.IsClass)
                 .ToDictionary(t=>t.Name, t => t);
         }
-
+        
         public IEnumerable<IStep<IEnumerable<IContext>, IEnumerable<IContext>>> Get(Settings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
@@ -29,26 +30,16 @@ namespace FileOps.Pipe
             {
                 throw new InvalidOperationException($"Missing settings for step '{emptyStepName.StepName}'.");
             }
-         
-            IEnumerable<KeyValuePair<Type, IStep<IEnumerable<IContext>, IEnumerable<IContext>>>> product = GetCorrectTypesAndData(settings);
 
-            foreach (KeyValuePair<Type, IStep<IEnumerable<IContext>, IEnumerable<IContext>>> pipeStep in product)
-            {
-                IStep<IEnumerable<IContext>, IEnumerable<IContext>> stepInstance =
-                    Activator.CreateInstance(pipeStep.Key, pipeStep.Value) as
-                        IStep<IEnumerable<IContext>, IEnumerable<IContext>>;
-
-                yield return stepInstance;
-            }
+            return GetCorrectTypesAndData(settings);
         }
 
 
 
-        private IEnumerable<KeyValuePair<Type, IStep<IEnumerable<IContext>, IEnumerable<IContext>>>> GetCorrectTypesAndData(Settings settings)
+        private IEnumerable<IStep<IEnumerable<IContext>, IEnumerable<IContext>>> GetCorrectTypesAndData(Settings settings)
         {
             foreach (Settings.Step step in settings.Pipe)
             {
-
                 Type stepType = _stepTypes[step.StepName];
 
                 ConstructorInfo stepConstructor = stepType.GetConstructors().FirstOrDefault();
@@ -65,16 +56,15 @@ namespace FileOps.Pipe
 
                 // ReSharper disable once PossibleNullReferenceException
                 Type type = constructorSettingsParameter.ParameterType;
-                IStep<IEnumerable<IContext>, IEnumerable<IContext>> instance = step.StepSettings.ToObject(type) as IStep<IEnumerable<IContext>, IEnumerable<IContext>>;
+
+                var  instance = step.StepSettings.ToObject(type);
 
                 if (instance == null)
                 {
                     throw new NullReferenceException($"Error: {step.StepSettings.Type} is not derived from IStep<IEnumerable<IContext>, IEnumerable<IContext>>");
                 }
 
-                instance.Identifier = settings.Identifier;
-
-                yield return KeyValuePair.Create(stepType, instance);
+                yield return Activator.CreateInstance(stepType, instance) as IStep<IEnumerable<IContext>, IEnumerable<IContext>>;
             }
         }
 
