@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Configuration.Entities
 {
-    public class ZipSettings : BaseSettings
+    public class ZipSettings 
     {
         public CompressionLevel CompressionLevel { get; set; }
 

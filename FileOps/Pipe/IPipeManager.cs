@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
 
 namespace FileOps.Pipe
 {
-    interface IPipeManager
+    public interface IFileOpsManager
     {
+        void Execute();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Common
 {
-    public static class Constants
+    internal static class Constants
     {
         public const long OneMb = 1024 * 1024;
         public const int DefaultSftpPort = 22;

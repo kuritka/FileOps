@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FileOps.Common
 {
-    public static class AssemblyHelper
+    internal static class AssemblyHelper
     {
         public static IEnumerable<Type> GetDerivedTypesFor(params Type[] baseTypes)
         {

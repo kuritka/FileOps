@@ -14,7 +14,7 @@ namespace FileOps.Steps.Zip
             _settings = settings;
         }
 
-        public IEnumerable<IContext> ExecuteStep(IEnumerable<IContext> toProcess)
+        public IEnumerable<IContext> Execute(IEnumerable<IContext> toProcess)
         {
             throw new NotImplementedException();
         }

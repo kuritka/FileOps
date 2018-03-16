@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Configuration.Entities
 {
-    public class ChannelSettings : BaseSettings
+    public class ChannelSettings 
     {
         public ConfigChannelType Type { get; set; }
         public string Path { get; set; }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FileOps.Common
 {
-    public static class FileInfoExtensions
+    internal static class FileInfoExtensions
     {
         public static FileInfo ThrowExceptionIfNullOrDoesntExists(this FileInfo file)
         {
