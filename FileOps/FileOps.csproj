@@ -13,8 +13,12 @@
     <Folder Include="Steps\GPGEncryptAndSign\" />
     <Folder Include="Steps\GPGDecryptAndVerify\" />
     <Folder Include="Steps\LoadState\" />
-    <Folder Include="Steps\CreateSuffixFile\" />
+    <Folder Include="Steps\CreateEmptyFile\" />
     <Folder Include="Steps\Filter\" />
+    <Folder Include="Steps\Metadata\" />
+    <Folder Include="Steps\TearDown\" />
+    <Folder Include="Steps\WriteValues\" />
+    <Folder Include="Steps\ReadValues\" />
     <Folder Include="Steps\StoreState\" />
     <Folder Include="Steps\Sequence\" />
     <Folder Include="Steps\Verify\" />
