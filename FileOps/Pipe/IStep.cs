@@ -3,7 +3,7 @@
 namespace FileOps.Pipe
 {
     public interface IStep<out TOut, in TIn> 
-       where TOut : IEnumerable<IContext>
+       where TOut : IAggregate
     {
         TOut Execute(TIn toProcess);        
     }

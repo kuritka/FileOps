@@ -16,12 +16,12 @@ namespace FileOps.Pipe
         public StepFactory()
         {
             _stepTypes = AssemblyHelper
-                .GetDerivedTypesFor(typeof(IStep<IEnumerable<IContext>, IEnumerable<IContext>>))
+                .GetDerivedTypesFor(typeof(IStep<IAggregate, IAggregate>))
                 .Where(type => type.IsClass)
                 .ToDictionary(t=>t.Name, t => t);
         }
         
-        public IEnumerable<IStep<IEnumerable<IContext>, IEnumerable<IContext>>> Get(Settings settings)
+        public IEnumerable<IStep<IAggregate, IAggregate>> Get(Settings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
             if (settings.Pipe == null) throw new ArgumentNullException(nameof(settings.Pipe));
@@ -36,7 +36,7 @@ namespace FileOps.Pipe
 
 
 
-        private IEnumerable<IStep<IEnumerable<IContext>, IEnumerable<IContext>>> GetCorrectTypesAndData(Settings settings)
+        private IEnumerable<IStep<IAggregate, IAggregate>> GetCorrectTypesAndData(Settings settings)
         {
             foreach (Settings.Step step in settings.Pipe)
             {
@@ -64,7 +64,7 @@ namespace FileOps.Pipe
                     throw new NullReferenceException($"Error: {step.StepSettings.Type} is not derived from IStep<IEnumerable<IContext>, IEnumerable<IContext>>");
                 }
 
-                yield return Activator.CreateInstance(stepType, instance) as IStep<IEnumerable<IContext>, IEnumerable<IContext>>;
+                yield return Activator.CreateInstance(stepType, instance) as IStep<IAggregate, IAggregate>;
             }
         }
 

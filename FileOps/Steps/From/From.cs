@@ -1,10 +1,9 @@
 ﻿using FileOps.Configuration.Entities;
 using FileOps.Pipe;
-using System.Collections.Generic;
 
 namespace FileOps.Steps.From
 {
-    public class From : IStep<IEnumerable<IContext>, IEnumerable<IContext>>
+    public class From : IStep<IAggregate, IAggregate>
     {
 
         private readonly FromSettings _settings;
@@ -15,7 +14,7 @@ namespace FileOps.Steps.From
         }
 
 
-        public IEnumerable<IContext> Execute(IEnumerable<IContext> toProcess)
+        public IAggregate Execute(IAggregate toProcess)
         {
             throw new System.NotImplementedException();
         }

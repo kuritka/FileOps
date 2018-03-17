@@ -5,21 +5,24 @@ namespace FileOps.Pipe
 {
     public class FileOpsManager : IFileOpsManager
     {
-        private LinkedList<IStep<IEnumerable<IContext>, IEnumerable<IContext>>> _steps;
+        private LinkedList<IStep<IAggregate, IAggregate>> _steps;
 
-        public FileOpsManager(LinkedList<IStep<IEnumerable<IContext>, IEnumerable<IContext>>> steps)
+        private IAggregate _aggregate = new AggregationRoot();
+
+        public FileOpsManager(LinkedList<IStep<IAggregate, IAggregate>> steps)
         {
             _steps = steps?? throw new ArgumentNullException(nameof(steps));
         }
 
+
         public void Execute()
         {
-            IEnumerable<IContext> context = new List<IContext>();
-
             foreach (var step in _steps)
             {
-                context = step.Execute(context);
+                _aggregate = step.Execute(_aggregate);
             }
         }
+
+        public IAggregate Context => _aggregate;
     }
 }

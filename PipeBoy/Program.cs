@@ -1,17 +1,11 @@
 ﻿using FileOps;
-using FileOps.Configuration;
-using FileOps.Configuration.Entities;
+using FileOps.Pipe;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 
 namespace PipeBoy
 {
-
-    
-    
-
     class Program
     {
         static void Main(string[] args)
@@ -25,6 +19,11 @@ namespace PipeBoy
                 .AddConfiguration(new FileInfo("settings.json"))
                 .AddConfiguration(new FileInfo("shared.settings.json"))
                 .Build();
+
+            IFileOpsManager manager = new FileOpsManager(x);
+
+            manager.Execute();
+
         }
     }
 }

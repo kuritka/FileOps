@@ -5,6 +5,6 @@ namespace FileOps.Pipe
 {
     internal interface IStepFactory
     {
-        IEnumerable<IStep<IEnumerable<IContext>, IEnumerable<IContext>>> Get(Settings settings);
+        IEnumerable<IStep<IAggregate, IAggregate>> Get(Settings settings);
     }
 }

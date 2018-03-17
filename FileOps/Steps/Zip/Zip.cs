@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace FileOps.Steps.Zip
 {
-    public class Zip : IStep<IEnumerable<IContext>, IEnumerable<IContext>>
+    public class Zip : IStep<IAggregate, IAggregate>
     {
         ZipSettings _settings;
 
@@ -14,7 +14,7 @@ namespace FileOps.Steps.Zip
             _settings = settings;
         }
 
-        public IEnumerable<IContext> Execute(IEnumerable<IContext> toProcess)
+        public IAggregate Execute(IAggregate toProcess)
         {
             throw new NotImplementedException();
         }

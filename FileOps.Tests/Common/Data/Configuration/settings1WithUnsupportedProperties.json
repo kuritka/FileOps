@@ -1,9 +1,7 @@
 {
-	"Identifier": "BEL_FSMA_Tra_Dev_Stat_TARGET",
+	"Identifier": "IDENTIFIER1_Domain_Dev_Source_TARGET",
 	"Enabled": "True",
-	"TriggerOnStart": "False",
-	"Cron": "*/1 * * * *",
-	"NcaIdentifier": "PRODUCT-IDENTIFIER",
+	"someUnsupportedValue": "False",
 	"Pipe": [
 		{
 			"StepName": "From",

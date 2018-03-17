@@ -1,9 +1,9 @@
-﻿using System.IO;
-
-namespace FileOps.Pipe
+﻿namespace FileOps.Pipe
 {
     public interface IFileOpsManager
     {
         void Execute();
+
+        IAggregate Context { get;  }
     }
 }

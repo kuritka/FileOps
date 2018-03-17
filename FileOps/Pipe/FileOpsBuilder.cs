@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using FileOps.Pipe;
 using System.IO;
 using FileOps.Common;
-using FileOps.Configuration;
 using FileOps.Configuration.Entities;
-using System.Linq;
+using FileOps.Configuration;
 
 namespace FileOps
 {
@@ -18,7 +17,6 @@ namespace FileOps
             _configFiles = new Dictionary<string, FileInfo>();
         }
 
-
         public IFileOpsBuilder AddConfiguration(FileInfo jsonFile)
         {
             jsonFile
@@ -27,53 +25,30 @@ namespace FileOps
                 .ThrowExceptionIfFileSizeExceedsMB(1);
             try
             {
+                _configFiles.Add(jsonFile.Name, jsonFile);
 
-                _configFiles.Add( jsonFile.Name, jsonFile);
-
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                throw new ArgumentException($"{jsonFile.Name} is already added.",ex);
+                throw new ArgumentException($"{jsonFile.Name} is already added.", ex);
             }
             return this;
         }
 
-        public LinkedList<IStep<IEnumerable<IContext>, IEnumerable<IContext>>> Build()
+
+        public LinkedList<IStep<IAggregate, IAggregate>> Build()
         {
-            Settings settings = new Settings();
-
-            IConfigurationFactory configurationFactory = new ConfigurationFactory();
-
             IStepFactory stepFactory = new StepFactory();
 
-            foreach (var configFile in _configFiles)
-            {
-                var tempSettings = configurationFactory.Get<Settings>(configFile.Value);
+            var settings = new ConfigurationFactory().Get<Settings>(_configFiles.Values);
 
-                MergeSettings(settings, tempSettings);
-            }
-            
+            if (settings.Pipe == null) settings.Pipe = new Settings.Step[0];
+
+            if (settings.Common == null) settings.Common = new Settings.CommonRecord[0];
+
             var steps = stepFactory.Get(settings);
 
-            return new LinkedList<IStep<IEnumerable<IContext>, IEnumerable<IContext>>>(steps);
+            return new LinkedList<IStep<IAggregate, IAggregate>>(steps);
         }
-
-
-       
-
-
-        private void MergeSettings<T>(T target, T source)
-        {
-            Type t = typeof(T);
-
-            var properties = t.GetProperties().Where(prop => prop.CanRead && prop.CanWrite);
-
-            foreach (var prop in properties)
-            {
-                var value = prop.GetValue(source, null);
-                if (value != null)
-                    prop.SetValue(target, value, null);
-            }
-        }
-
     }
 }

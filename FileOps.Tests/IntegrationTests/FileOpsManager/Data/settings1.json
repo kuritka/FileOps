@@ -1,10 +1,10 @@
 {
-	"JobName": "BEL_FSMA_Tra_Dev_Stat_DMZ",
+	"Identifier": "IDENTIFIER_Tra_Dev_Stat_TARGET",
 	"Enabled": "True",
 	"TriggerOnStart": "False",
 	"Cron": "*/1 * * * *",
-	"NcaIdentifier": "BE-FSMA",
-	"Pipe": [
+	"NcaIdentifier": "PRODUCT-IDENTIFIER",
+	"Pipe": [ 
 		{
 			"StepName": "From",
       "StepSettings": {
@@ -13,9 +13,9 @@
         "Host": "10.112.4.200",
         "Port": 22,
         "UserName": "ec2-user",
-        "PrivateKey": "/opt/Beamer/Release/Configuration/DEV/ImpendiumEmir2Migration.pem",
-        "FileMask": "A26MIFIR_*_{timestamp:yyyyMMddTHHmmss}_BE-FSMA*.XML",
-        "LocalBackupPath": "/home/beamer/FTP_Copy/Inbound/StatistiX/BE-FSMA",
+        "PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
+        "FileMask": "A26MIFIR_*_{timestamp:yyyyMMddTHHmmss}_PRODUCT-IDENTIFIER*.XML",
+        "LocalBackupPath": "/home/FileOps/FTP_Copy/Inbound/Source/PRODUCT-IDENTIFIER",
         "CreateFileMappingInMongo": "True"
       }
 		},
@@ -32,8 +32,8 @@
 				"Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_OUT",
 				"Host": "10.112.4.200",
 				"UserName": "ec2-user",
-				"PrivateKey": "/opt/Beamer/Release/Configuration/DEV/ImpendiumEmir2Migration.pem",
-				"LocalBackupPath": "/home/beamer/FTP_Copy/Outbound/DMZ/BE-FSMA"
+				"PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
+				"LocalBackupPath": "/home/FileOps/FTP_Copy/Outbound/TARGET/PRODUCT-IDENTIFIER"
 			}
 		}
 	]

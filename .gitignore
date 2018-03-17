@@ -232,4 +232,4 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-/Beamer/ImpendiumEmir2Migration.pem
+/FileOps/key.pem

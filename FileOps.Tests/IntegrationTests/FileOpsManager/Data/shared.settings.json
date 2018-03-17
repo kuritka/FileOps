@@ -7,7 +7,7 @@
         "Host": "10.112.4.200",
         "Port": 22,
         "UserName": "ec2-user",
-        "PrivateKey": "/opt/Beamer/Release/Configuration/DEV/ImpendiumEmir2Migration.pem"
+        "PrivateKey": "/opt/App/Release/Configuration/DEV/key.pem"
       }
     },
     {
@@ -17,7 +17,7 @@
         "Host": "10.112.4.222",
         "Port": 22,
         "UserName": "ec2-user",
-        "PrivateKey": "/opt/Beamer/Release/Configuration/DEV/ImpendiumEmir2Migration.pem"
+        "PrivateKey": "/opt/App/Release/Configuration/DEV/key.pem"
       }
     }
   ]

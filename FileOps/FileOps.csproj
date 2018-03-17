@@ -25,7 +25,6 @@
     <Folder Include="Steps\Sign\" />
     <Folder Include="Steps\WaitForResponse\" />
     <Folder Include="Steps\UnGZip\" />
-    <Folder Include="Steps\UnZip\" />
     <Folder Include="Steps\Rename\" />
   </ItemGroup>
 

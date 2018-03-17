@@ -1,7 +1,7 @@
 ﻿
 namespace FileOps.Pipe
 {
-    public interface IContext
+    internal interface IContext 
     {
     }
 }

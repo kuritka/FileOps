@@ -1,0 +1,14 @@
+{
+  "Common": [
+    {
+      "Name": "Test00",
+      "StepSettings": {
+        "Type": "local",
+        "Host": "10.112.4.222",
+        "Port": 22
+      }
+    }
+  ]
+}
+
+ 

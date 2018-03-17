@@ -1,15 +1,14 @@
 ﻿using FileOps.Configuration.Entities;
 using FileOps.Pipe;
 using System;
-using System.Collections.Generic;
 
-namespace FileOps.Steps.To
+namespace FileOps.Steps.UnZip
 {
-    public class To : IStep<IAggregate, IAggregate>
+    public class UnZip : IStep<IAggregate, IAggregate>
     {
-        private readonly ToSettings _settings;
+        ZipSettings _settings;
 
-        public To(ToSettings settings)
+        public UnZip(ZipSettings settings)
         {
             _settings = settings;
         }
