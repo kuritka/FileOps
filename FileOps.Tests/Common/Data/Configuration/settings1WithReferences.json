@@ -1,0 +1,28 @@
+{
+	"Identifier": "IDENTIFIER1_Domain_Dev_Source_TARGET",
+	"Enabled": "True",
+  "Pipe": [
+    {
+      "StepName": "From",
+      "StepSettings": {
+        "Path": "/home/ec2-user/FTP/Inbound/CUSTOM_IN"
+      },
+      "Reference": "SFTPSource1"
+    },
+    {
+      "StepName": "Zip",
+      "Reference": "ZipWithPassword"
+    },
+    {
+      "StepName": "To",
+      "StepSettings": {
+        "Type": "sftp",
+        "Path": "/home/ec2-user/FTP/Inbound/NO_REFERENCE_OUT",
+        "Host": "10.112.4.200",
+        "UserName": "ec2-user",
+        "PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
+        "LocalBackupPath": "/home/FileOps/FTP_Copy/Outbound/TARGET/PRODUCT-IDENTIFIER"
+      }
+    }
+  ]
+}

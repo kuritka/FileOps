@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using FileOps.Configuration.Entities;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FileOps.Configuration
 {
-    internal interface IConfigurationFactory
+    internal interface IConfigurationFactory 
     {
-        T Get<T>(IEnumerable<FileInfo> file);
+        Settings Get(IEnumerable<FileInfo> file);
     }
 }

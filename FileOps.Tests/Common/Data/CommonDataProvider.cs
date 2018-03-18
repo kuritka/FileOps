@@ -2,7 +2,7 @@
 
 namespace FileOps.Tests.Common.Data
 {
-    public static class CommonDataProvider
+    public static class FileProvider
     {
         public static class Configuration
         {
@@ -12,7 +12,7 @@ namespace FileOps.Tests.Common.Data
 
             public static readonly FileInfo SettingsZipping = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1.json"));
 
-            public static readonly FileInfo SettingsZippingWithPassword= new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1WithZipPassword.json"));
+            public static readonly FileInfo SettingsZippingWithPassword= new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1WithZipPassword.jSON"));
 
             public static readonly FileInfo SettingsZippingWithUpdatedPassword = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1WithZipPassword2.json"));
 
@@ -22,11 +22,15 @@ namespace FileOps.Tests.Common.Data
 
             public static readonly FileInfo SettingsZippingCorrupted = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1Corrupted.json"));
 
-            public static readonly FileInfo Settings2 = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings2.json"));
+            public static readonly FileInfo Settings2 = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings2.JSON"));
 
             public static readonly FileInfo SharedSettings = new FileInfo(Path.Combine("Common", "Data", "Configuration", "shared.settings.json"));
 
             public static readonly FileInfo SharedSettings2 = new FileInfo(Path.Combine("Common", "Data", "Configuration", "shared.settings2.json"));
+
+            public static readonly FileInfo SettingsZippingWithReferences = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1WithReferences.json"));
+
+            public static readonly FileInfo SettingsZippingWithReferencesShared = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1WithReferences.Shared.json"));
         }
 
     }

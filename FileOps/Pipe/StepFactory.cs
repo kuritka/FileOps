@@ -4,6 +4,7 @@ using FileOps.Configuration.Entities;
 using FileOps.Common;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace FileOps.Pipe
 {
@@ -24,7 +25,13 @@ namespace FileOps.Pipe
         public IEnumerable<IStep<IAggregate, IAggregate>> Get(Settings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
-            if (settings.Pipe == null) throw new ArgumentNullException(nameof(settings.Pipe));
+
+            if (settings.Pipe == null) {
+
+                string message = settings.Common.IsNullOrEmpty() ? nameof(settings.Pipe) : $"{nameof(settings.Common)} configuration is filled but { nameof(settings.Pipe) } is empty";
+                throw new ArgumentNullException(message);
+            }
+
             Settings.Step emptyStepName = settings.Pipe.FirstOrDefault(x => x.StepSettings == null);
             if (emptyStepName != null)
             {
@@ -40,31 +47,39 @@ namespace FileOps.Pipe
         {
             foreach (Settings.Step step in settings.Pipe)
             {
-                Type stepType = _stepTypes[step.StepName];
-
-                ConstructorInfo stepConstructor = stepType.GetConstructors().FirstOrDefault();
-
-                if (stepConstructor == null)
+                Type stepType;
+                object constructorParameterInstance;
+                try
                 {
-                    throw new InvalidOperationException(
-                        $"Pipe step '{step.StepName}' class should have a constructor.");
+                    stepType = _stepTypes[step.StepName];
+
+                    ConstructorInfo stepConstructor = stepType.GetConstructors().FirstOrDefault();
+
+                    if (stepConstructor == null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Pipe step '{step.StepName}' class should have a constructor.");
+                    }
+
+                    // Extract the relevant settings type from the step constructor and the convert Json settings to this type.
+                    ParameterInfo constructorSettingsParameter =
+                        stepConstructor.GetParameters().FirstOrDefault();
+
+                    Type type = constructorSettingsParameter.ParameterType;
+
+                    constructorParameterInstance = step.StepSettings.ToObject(type);
+
+                    if (constructorParameterInstance == null)
+                    {
+                        throw new NullReferenceException($"Error: {step.StepSettings.Type} is not derived from IStep<IEnumerable<IContext>, IEnumerable<IContext>>");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException($"Error at building pipe for step {settings.Identifier} - {step.StepName}",ex);
                 }
 
-                // Extract the relevant settings type from the step constructor and the convert Json settings to this type.
-                ParameterInfo constructorSettingsParameter =
-                    stepConstructor.GetParameters().FirstOrDefault(x => x.Position == 0);
-
-                // ReSharper disable once PossibleNullReferenceException
-                Type type = constructorSettingsParameter.ParameterType;
-
-                var  instance = step.StepSettings.ToObject(type);
-
-                if (instance == null)
-                {
-                    throw new NullReferenceException($"Error: {step.StepSettings.Type} is not derived from IStep<IEnumerable<IContext>, IEnumerable<IContext>>");
-                }
-
-                yield return Activator.CreateInstance(stepType, instance) as IStep<IAggregate, IAggregate>;
+                yield return Activator.CreateInstance(stepType, constructorParameterInstance) as IStep<IAggregate, IAggregate>;
             }
         }
 

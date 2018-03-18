@@ -19,6 +19,8 @@ namespace FileOps.Configuration.Entities
             public string StepName { get; set; }
 
             public JObject StepSettings { get; set; }
+
+            public string Reference { get; set; }
         }
 
         public class CommonRecord

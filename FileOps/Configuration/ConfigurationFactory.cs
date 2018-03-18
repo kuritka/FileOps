@@ -1,16 +1,17 @@
 ﻿using FileOps.Common;
+using FileOps.Configuration.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
 
 namespace FileOps.Configuration
 {
     internal class ConfigurationFactory : IConfigurationFactory
     {
-        public T Get<T>(IEnumerable<FileInfo> configFiles)
+        public Settings Get(IEnumerable<FileInfo> configFiles)
         {
             if (configFiles == null) throw new ArgumentNullException(nameof(configFiles));
 
@@ -36,9 +37,32 @@ namespace FileOps.Configuration
                 }
             }
 
-            T result = merged.ToObject<T>();
+            Settings settings = merged.ToObject<Settings>();
 
-            return result;
+            if (settings.Pipe == null) settings.Pipe = new Settings.Step[0];
+
+            if (settings.Common == null) settings.Common= new Settings.CommonRecord[0];
+
+            foreach (var step in settings.Pipe)
+            {
+                if (!step.Reference.IsNullOrEmpty())
+                {
+                    var reference = settings.Common.FirstOrDefault(d => d.Name == step.Reference);
+                    if (reference == null)
+                    {
+                        throw new JsonException($"Parsing configuration error for reference {step.Reference}");
+                    }
+                    reference.StepSettings.Merge(step.StepSettings, new JsonMergeSettings
+                    {
+                        MergeArrayHandling = MergeArrayHandling.Merge
+                    });
+                    step.StepSettings = reference.StepSettings;
+                }
+            }
+
+           
+
+            return settings;
         }
       
     }

@@ -23,10 +23,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Common\Data\Configuration\settings1WithReferences.Shared.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Common\Data\Configuration\settings1WithReferences.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Common\Data\Configuration\settings1WithZipPassword2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Common\Data\Configuration\settings1WithZipPassword.json">
+    <None Update="Common\Data\Configuration\settings1WithZipPassword.jSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Common\Data\Configuration\settings1.json">
@@ -38,7 +44,7 @@
     <None Update="Common\Data\Configuration\settings1Corrupted.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Common\Data\Configuration\settings2.json">
+    <None Update="Common\Data\Configuration\settings2.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Common\Data\Configuration\shared.settings.json">

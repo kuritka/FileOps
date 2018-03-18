@@ -2,7 +2,6 @@
 using FileOps.Configuration.Entities;
 using FileOps.Tests.Common.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,11 +20,11 @@ namespace FileOps.Tests.UnitTests.Configuration
 
             IEnumerable<FileInfo> testFiles = new FileInfo[]
             {
-                CommonDataProvider.Configuration.SettingsZipping
+                FileProvider.Configuration.SettingsZipping
             };
 
             //Act
-            Settings settings = factory.Get<Settings>(testFiles);
+            Settings settings = factory.Get(testFiles);
 
             //Assert
             Assert.AreEqual(3, settings.Pipe.Length);
@@ -33,7 +32,7 @@ namespace FileOps.Tests.UnitTests.Configuration
             Assert.AreEqual("Zip", settings.Pipe[1].StepName);
             Assert.AreEqual("To", settings.Pipe[2].StepName);
 
-            Assert.IsNull(settings.Common);
+            Assert.IsNotNull(settings.Common);
 
             Assert.IsNotNull(settings.Pipe[0].StepSettings);
             Assert.IsNotNull(settings.Pipe[1].StepSettings);
@@ -50,12 +49,12 @@ namespace FileOps.Tests.UnitTests.Configuration
 
             IEnumerable<FileInfo> testFiles = new FileInfo[]
             {
-                CommonDataProvider.Configuration.SettingsZipping,
-                CommonDataProvider.Configuration.SharedSettings
+                FileProvider.Configuration.SettingsZipping,
+                FileProvider.Configuration.SharedSettings
             };
 
             //Act
-            Settings settings = factory.Get<Settings>(testFiles);
+            Settings settings = factory.Get(testFiles);
 
             //Assert
             Assert.AreEqual(3, settings.Pipe.Length);
@@ -85,13 +84,13 @@ namespace FileOps.Tests.UnitTests.Configuration
 
             IEnumerable<FileInfo> testFiles = new FileInfo[]
             {
-                CommonDataProvider.Configuration.SettingsZipping,
-                CommonDataProvider.Configuration.SettingsZippingWithPassword,
-                CommonDataProvider.Configuration.SettingsZippingWithUpdatedPassword
+                FileProvider.Configuration.SettingsZipping,
+                FileProvider.Configuration.SettingsZippingWithPassword,
+                FileProvider.Configuration.SettingsZippingWithUpdatedPassword
             };
 
             //Act
-            Settings settings = factory.Get<Settings>(testFiles);
+            Settings settings = factory.Get(testFiles);
 
             //Assert
             Assert.AreEqual(3, settings.Pipe.Length);
@@ -101,7 +100,7 @@ namespace FileOps.Tests.UnitTests.Configuration
 
             //Assert.AreEqual(    settings.Pipe[1].StepSettings);
 
-            Assert.IsNull(settings.Common);
+            Assert.IsNotNull(settings.Common);
 
             Assert.IsNotNull(settings.Pipe[0].StepSettings);
             Assert.IsNotNull(settings.Pipe[1].StepSettings);
@@ -120,13 +119,13 @@ namespace FileOps.Tests.UnitTests.Configuration
 
             IEnumerable<FileInfo> testFiles = new FileInfo[]
             {
-                CommonDataProvider.Configuration.SettingsZipping,
-                CommonDataProvider.Configuration.SettingsUnzipping,
-                CommonDataProvider.Configuration.SharedSettings
+                FileProvider.Configuration.SettingsZipping,
+                FileProvider.Configuration.SettingsUnzipping,
+                FileProvider.Configuration.SharedSettings
             };
 
             //Act
-            Settings settings = factory.Get<Settings>(testFiles);
+            Settings settings = factory.Get(testFiles);
 
             //Assert
             Assert.AreEqual(3, settings.Pipe.Length);
@@ -155,14 +154,14 @@ namespace FileOps.Tests.UnitTests.Configuration
 
             IEnumerable<FileInfo> testFiles = new FileInfo[]
             {
-                CommonDataProvider.Configuration.SettingsZipping,
-                CommonDataProvider.Configuration.SettingsUnzipping,
-                CommonDataProvider.Configuration.SharedSettings,
-                CommonDataProvider.Configuration.SharedSettings2
+                FileProvider.Configuration.SettingsZipping,
+                FileProvider.Configuration.SettingsUnzipping,
+                FileProvider.Configuration.SharedSettings,
+                FileProvider.Configuration.SharedSettings2
             };
 
             //Act
-            Settings settings = factory.Get<Settings>(testFiles);
+            Settings settings = factory.Get(testFiles);
 
             //Assert
             Assert.AreEqual(3, settings.Pipe.Length);
@@ -188,11 +187,10 @@ namespace FileOps.Tests.UnitTests.Configuration
             IConfigurationFactory factory = new ConfigurationFactory();
            
             //Act
-            Settings settings = factory.Get<Settings>(new List<FileInfo>());
+            Settings settings = factory.Get(new List<FileInfo>());
 
             //Assert
             Assert.IsNotNull(settings);
-
         }
 
 
@@ -205,7 +203,7 @@ namespace FileOps.Tests.UnitTests.Configuration
             IConfigurationFactory factory = new ConfigurationFactory();
 
             //Act
-            Settings settings = factory.Get<Settings>(null);
+            Settings settings = factory.Get(null);
 
             //Assert
             Assert.IsNotNull(settings);
@@ -220,11 +218,11 @@ namespace FileOps.Tests.UnitTests.Configuration
 
             IEnumerable<FileInfo> testFiles = new FileInfo[]
             {
-                CommonDataProvider.Configuration.NotExistingJSonFile
+                FileProvider.Configuration.NotExistingJSonFile
             };
 
             //Act
-            Settings settings = factory.Get<Settings>(testFiles);
+            Settings settings = factory.Get(testFiles);
 
             //Assert
             Assert.IsNotNull(settings);
@@ -239,12 +237,77 @@ namespace FileOps.Tests.UnitTests.Configuration
 
             IEnumerable<FileInfo> testFiles = new FileInfo[]
             {
-                CommonDataProvider.Configuration.SettingsInXml
+                FileProvider.Configuration.SettingsInXml
             };
 
             //Act
-            Settings settings = factory.Get<Settings>(testFiles);
+            Settings settings = factory.Get(testFiles);
         }
+
+        public void OnlySharedSettings()
+        {
+            //Arrange
+            IConfigurationFactory factory = new ConfigurationFactory();
+
+            IEnumerable<FileInfo> testFiles = new FileInfo[]
+            {
+                FileProvider.Configuration.SettingsZippingWithReferencesShared,
+            };
+
+            //Act
+            Settings settings = factory.Get(testFiles);
+
+            //Assert
+            Assert.AreEqual(0, settings.Common);
+            Assert.AreEqual(0, settings.Pipe);
+        }
+
+
+
+        [TestMethod]
+        public void ReferencedSharedSettings()
+        {
+            //Arrange
+            IConfigurationFactory factory = new ConfigurationFactory();
+
+            IEnumerable<FileInfo> testFiles = new FileInfo[]
+            {
+                FileProvider.Configuration.SettingsZippingWithReferencesShared,
+                FileProvider.Configuration.SettingsZippingWithReferences,
+            };
+
+            //Act
+            Settings settings = factory.Get(testFiles);
+
+            //Assert
+            Assert.AreEqual(3, settings.Pipe.Length);
+            Assert.AreEqual("From", settings.Pipe[0].StepName);
+            Assert.AreEqual("Zip", settings.Pipe[1].StepName);
+            Assert.AreEqual("To", settings.Pipe[2].StepName);
+
+            Assert.AreEqual(3, settings.Common.Length);
+            Assert.AreEqual("SFTPSource1", settings.Common[0].Name);
+            Assert.AreEqual("SFTPTarget1", settings.Common[1].Name);
+            Assert.AreEqual("ZipWithPassword", settings.Common[2].Name);
+
+
+            //((ZipSettings)settings.Pipe[1].StepSettings.ToObject(typeof(ZipSettings))).Password
+            Assert.AreEqual(
+                ((ZipSettings)settings.Pipe[1].StepSettings.ToObject(typeof(ZipSettings))).Password,
+                ((ZipSettings)settings.Common[2].StepSettings.ToObject(typeof(ZipSettings))).Password);
+
+            Assert.AreEqual(
+                 ((FromSettings)settings.Pipe[0].StepSettings.ToObject(typeof(FromSettings))).Path,
+                 ((FromSettings)settings.Common[0].StepSettings.ToObject(typeof(FromSettings))).Path);
+
+            Assert.IsTrue(
+                ((ToSettings)settings.Pipe[2].StepSettings.ToObject(typeof(ToSettings))).Path.EndsWith("NO_REFERENCE_OUT"));
+
+
+            Assert.IsNotNull(settings.Common[0].StepSettings);
+            Assert.IsNotNull(settings.Common[1].StepSettings);
+        }
+
 
     }
 }

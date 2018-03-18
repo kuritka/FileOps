@@ -40,11 +40,7 @@ namespace FileOps
         {
             IStepFactory stepFactory = new StepFactory();
 
-            var settings = new ConfigurationFactory().Get<Settings>(_configFiles.Values);
-
-            if (settings.Pipe == null) settings.Pipe = new Settings.Step[0];
-
-            if (settings.Common == null) settings.Common = new Settings.CommonRecord[0];
+            var settings = new ConfigurationFactory().Get(_configFiles.Values);
 
             var steps = stepFactory.Get(settings);
 

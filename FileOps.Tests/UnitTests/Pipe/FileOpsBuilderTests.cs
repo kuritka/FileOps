@@ -21,7 +21,7 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Arrange
             //Act
             var steps = new FileOpsBuilder()
-              .AddConfiguration(CommonDataProvider.Configuration.SettingsZipping)
+              .AddConfiguration(FileProvider.Configuration.SettingsZipping)
               .Build().ToList();
 
             //Assert
@@ -38,8 +38,8 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Arrange
             //Act
             var steps = new FileOpsBuilder()
-              .AddConfiguration(CommonDataProvider.Configuration.SettingsZipping)
-               .AddConfiguration(CommonDataProvider.Configuration.SharedSettings)
+              .AddConfiguration(FileProvider.Configuration.SettingsZipping)
+               .AddConfiguration(FileProvider.Configuration.SharedSettings)
               .Build().ToList();
 
             //Assert
@@ -55,9 +55,9 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Arrange
             //Act
             var steps = new FileOpsBuilder()
-              .AddConfiguration(CommonDataProvider.Configuration.SettingsZipping)
-               .AddConfiguration(CommonDataProvider.Configuration.SettingsZippingWithPassword)
-               .AddConfiguration(CommonDataProvider.Configuration.SettingsZippingWithUpdatedPassword)
+              .AddConfiguration(FileProvider.Configuration.SettingsZipping)
+               .AddConfiguration(FileProvider.Configuration.SettingsZippingWithPassword)
+               .AddConfiguration(FileProvider.Configuration.SettingsZippingWithUpdatedPassword)
               .Build().ToList();
 
             //Assert
@@ -74,9 +74,9 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Arrange
             //Act
             var steps = new FileOpsBuilder()
-              .AddConfiguration(CommonDataProvider.Configuration.SettingsZipping)
-               .AddConfiguration(CommonDataProvider.Configuration.SettingsUnzipping)
-               .AddConfiguration(CommonDataProvider.Configuration.SharedSettings)
+              .AddConfiguration(FileProvider.Configuration.SettingsZipping)
+               .AddConfiguration(FileProvider.Configuration.SettingsUnzipping)
+               .AddConfiguration(FileProvider.Configuration.SharedSettings)
               .Build().ToList();
 
             //Assert
@@ -93,10 +93,10 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Arrange
             //Act
             var steps = new FileOpsBuilder()
-              .AddConfiguration(CommonDataProvider.Configuration.SettingsZipping)
-               .AddConfiguration(CommonDataProvider.Configuration.SettingsUnzipping)
-               .AddConfiguration(CommonDataProvider.Configuration.SharedSettings)
-               .AddConfiguration(CommonDataProvider.Configuration.SharedSettings2)
+              .AddConfiguration(FileProvider.Configuration.SettingsZipping)
+               .AddConfiguration(FileProvider.Configuration.SettingsUnzipping)
+               .AddConfiguration(FileProvider.Configuration.SharedSettings)
+               .AddConfiguration(FileProvider.Configuration.SharedSettings2)
               .Build().ToList();
 
             //Assert
@@ -136,7 +136,7 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Act
             //Assert
             var steps = new FileOpsBuilder()
-            .AddConfiguration(CommonDataProvider.Configuration.NotExistingJSonFile)
+            .AddConfiguration(FileProvider.Configuration.NotExistingJSonFile)
             .Build();
         }
 
@@ -148,7 +148,7 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Act
             //Assert
             var steps = new FileOpsBuilder()
-            .AddConfiguration(CommonDataProvider.Configuration.SettingsInXml)
+            .AddConfiguration(FileProvider.Configuration.SettingsInXml)
             .Build();
         }
 

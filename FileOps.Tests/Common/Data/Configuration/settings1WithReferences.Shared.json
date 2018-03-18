@@ -1,0 +1,36 @@
+{
+  "Common": [
+    {
+      "Name": "SFTPSource1",
+      "StepSettings": {
+        "Type": "sftp",
+        "Path": "/home/ec2-user/FTP/Inbound/SHARED_IN",
+        "Host": "10.112.4.200",
+        "Port": 22,
+        "UserName": "ec2-user",
+        "PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
+        "FileMask": "A26MIFIR_*_{timestamp:yyyyMMddTHHmmss}_PRODUCT-IDENTIFIER*.XML",
+        "LocalBackupPath": "/home/FileOps/FTP_Copy/Inbound/Source/PRODUCT-IDENTIFIER",
+        "CreateFileMappingInMongo": "True"
+      }
+    },
+    {
+      "Name": "SFTPTarget1",
+      "StepSettings": {
+        "Type": "sftp",
+        "Path": "/home/ec2-user/FTP/Inbound/SHARED_OUT",
+        "Host": "10.112.4.200",
+        "UserName": "ec2-user",
+        "PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
+        "LocalBackupPath": "/home/FileOps/FTP_Copy/Outbound/TARGET/PRODUCT-IDENTIFIER"
+      }
+    },
+    {
+      "Name": "ZipWithPassword",
+      "StepSettings": {
+        "AddExtension": "True",
+        "Password": ".Dell!Skalice-1"
+      }
+    }
+  ]
+}
