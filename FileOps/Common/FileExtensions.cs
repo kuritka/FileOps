@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FileOps.Common
 {
@@ -43,6 +44,14 @@ namespace FileOps.Common
         public static bool HasSamePath(this FileInfo file1, FileInfo file2)
         {
             return string.Compare(file1.Directory.FullName, file2.Directory.FullName, StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+
+        public static bool IsMatch(this FileInfo file, string mask, RegexOptions regexOptions = RegexOptions.None)
+        {
+            string regexPattern = mask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".") + "$";
+            Match match = Regex.Match(file.Name, regexPattern, regexOptions);
+            return match.Success;
         }
 
     }

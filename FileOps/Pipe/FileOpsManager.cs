@@ -14,11 +14,15 @@ namespace FileOps.Pipe
             _steps = steps?? throw new ArgumentNullException(nameof(steps));
         }
 
+        public Action<IAggregate> Status;
 
         public void Execute()
         {
+            
             foreach (var step in _steps)
             {
+                Status.Invoke(_aggregate);
+
                 _aggregate = step.Execute(_aggregate);
             }
         }

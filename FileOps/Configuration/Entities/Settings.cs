@@ -30,4 +30,5 @@ namespace FileOps.Configuration.Entities
             public JObject StepSettings { get; set; }
         }
     }
+
 }

@@ -39,9 +39,21 @@ namespace FileOps.Configuration
 
             Settings settings = merged.ToObject<Settings>();
 
+            MapReferencesToSteps(settings);
+
+            return settings;
+        }
+
+
+
+        /// <summary>
+        /// It merge StepSettings if Reference attribute points to shared settings
+        /// </summary>
+        private void MapReferencesToSteps(Settings settings)
+        {
             if (settings.Pipe == null) settings.Pipe = new Settings.Step[0];
 
-            if (settings.Common == null) settings.Common= new Settings.CommonRecord[0];
+            if (settings.Common == null) settings.Common = new Settings.CommonRecord[0];
 
             foreach (var step in settings.Pipe)
             {
@@ -59,10 +71,6 @@ namespace FileOps.Configuration
                     step.StepSettings = reference.StepSettings;
                 }
             }
-
-           
-
-            return settings;
         }
       
     }

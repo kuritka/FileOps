@@ -5,5 +5,6 @@
         void Execute();
 
         IAggregate Context { get;  }
+        
     }
 }
