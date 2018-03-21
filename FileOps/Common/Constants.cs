@@ -17,6 +17,7 @@
             public const string GZip = ".gz";
             public const string P7S = ".p7s";
             public const string Json = ".json";
+            public const string FileOps = ".FileOps.tmp";
         }
 
     }

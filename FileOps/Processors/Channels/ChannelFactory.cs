@@ -19,14 +19,7 @@ namespace FileOps.Processors.Channels
             {
                 case ConfigChannelType.Local:
                     {
-                        if (channelDirection == ChannelDirectionEnum.Inbound)
-                        {
-                            return new LocalChannel(new DirectoryInfo(channelSettings.Path), processingDirectory, (FromSettings)channelSettings);
-                        }
-                        else
-                        {
-                            return new LocalChannel(processingDirectory, new DirectoryInfo(channelSettings.Path), (ToSettings)channelSettings);
-                        }
+                        return new LocalChannel(processingDirectory, channelSettings);
                     }
                 case ConfigChannelType.Sftp:
                     {

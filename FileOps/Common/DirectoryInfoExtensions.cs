@@ -14,5 +14,17 @@ namespace FileOps.Common
             return directory;
         }
 
+
+
+        public static DirectoryInfo AsDirectoryInfo(this string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return new DirectoryInfo(path);
+            }
+            throw new ArgumentNullException(nameof(path));
+        }
+
+
     }
 }
