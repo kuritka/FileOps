@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FileOps.Configuration.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace FileOps.Pipe
 {
     public class FileOpsManager : IFileOpsManager
     {
-        private LinkedList<IStep<IAggregate, IAggregate>> _steps;
+        private readonly LinkedList<IStep<IAggregate, IAggregate>> _steps;
 
         private IAggregate _aggregate = new AggregationRoot();
 
@@ -25,6 +26,13 @@ namespace FileOps.Pipe
 
                 _aggregate = step.Execute(_aggregate);
             }
+        }
+
+        public IFileOpsManager AddStep(IStep<IAggregate, IAggregate> step)
+        {
+            if (step == null) throw new ArgumentNullException(nameof(step));
+            _steps.AddLast(step);
+            return this;
         }
 
         public IAggregate Context => _aggregate;

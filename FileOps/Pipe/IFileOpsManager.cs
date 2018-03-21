@@ -4,6 +4,8 @@
     {
         void Execute();
 
+        IFileOpsManager AddStep(IStep<IAggregate, IAggregate> step);
+
         IAggregate Context { get;  }
         
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using FileOps.Configuration.Entities;
+using FileOps.Common;
 
 namespace FileOps.Processors.Channels
 {
@@ -11,26 +12,18 @@ namespace FileOps.Processors.Channels
         private readonly DirectoryInfo _target;
         private readonly ChannelSettings _channelSettings;
         private readonly ChannelDirectionEnum _channelDirection;
-        private readonly string _fileMask;
-        private readonly string _successFileUploadSuffix;
-        private readonly IList<string> _excludeFileNameWithParts;
-        private DirectoryInfo sourceDirectoryInfo;
-        private DirectoryInfo targetDirectoryInfo;
-        private FromSettings channelSettings;
-        private ToSettings channelSettings1;
 
-        public LocalChannel(DirectoryInfo sourceDirectoryInfo, DirectoryInfo targetDirectoryInfo, FromSettings channelSettings)
-        {
-            this.sourceDirectoryInfo = sourceDirectoryInfo;
-            this.targetDirectoryInfo = targetDirectoryInfo;
-            this.channelSettings = channelSettings;
-        }
+       
 
-        public LocalChannel(DirectoryInfo sourceDirectoryInfo, DirectoryInfo targetDirectoryInfo, ToSettings channelSettings1)
+        public LocalChannel(DirectoryInfo sourceDirectoryInfo, DirectoryInfo targetDirectoryInfo, ChannelSettings channelSettings)
         {
-            this.sourceDirectoryInfo = sourceDirectoryInfo;
-            this.targetDirectoryInfo = targetDirectoryInfo;
-            this.channelSettings1 = channelSettings1;
+            _channelSettings = channelSettings ?? throw new ArgumentNullException(nameof(channelSettings));
+
+            _channelDirection = ChannelDirectionFactory.Get(channelSettings);
+
+            _source = sourceDirectoryInfo.ThrowExceptionIfNullOrDoesntExists();
+
+            _target = targetDirectoryInfo.ThrowExceptionIfNullOrDoesntExists();
         }
 
         public string SourceFullPath => _source.FullName;
@@ -63,5 +56,7 @@ namespace FileOps.Processors.Channels
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

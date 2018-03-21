@@ -53,6 +53,5 @@ namespace FileOps.Common
             Match match = Regex.Match(file.Name, regexPattern, regexOptions);
             return match.Success;
         }
-
     }
 }
