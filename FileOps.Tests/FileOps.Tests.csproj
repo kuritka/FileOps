@@ -53,6 +53,18 @@
     <None Update="Common\Data\Configuration\shared.settings2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Common\Data\TestDirectory\EE_FEETRA_TPY_000451-0_18.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Common\Data\TestDirectory\EE_FEETRA_TPY_000452-0_18.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Common\Data\TestDirectory\EE_FEETRA_TPY_000454-0_18.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Common\Data\TestDirectory\GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="IntegrationTests\FileOpsManager\Data\settings2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

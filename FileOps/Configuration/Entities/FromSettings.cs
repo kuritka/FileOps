@@ -2,7 +2,7 @@
 
 namespace FileOps.Configuration.Entities
 {
-    public class FromSettings : ChannelSettings
+    public class FromSettings : ChannelSettings,  ISettings
     {
 
         public FromSettings()
@@ -18,5 +18,9 @@ namespace FileOps.Configuration.Entities
         public string[] ExclusionFileMasks { get; set; }
 
         public bool IgnoreEmptyFiles { get; set; }
+
+        public string Identifier { get; set; }
+
+        public string GroupIdentifier { get; set; }
     }
 }

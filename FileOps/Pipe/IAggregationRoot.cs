@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace FileOps.Pipe
 {
@@ -10,5 +11,6 @@ namespace FileOps.Pipe
 
         void AddOrUpdate();
 
+        Guid Guid { get;}
     }
 }

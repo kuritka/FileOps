@@ -72,6 +72,15 @@ namespace FileOps.Pipe
                     {
                         throw new NullReferenceException($"Error: {step.StepSettings.Type} is not derived from IStep<IEnumerable<IContext>, IEnumerable<IContext>>");
                     }
+
+                    if(constructorParameterInstance as ISettings == null)
+                    {
+                        throw new InvalidCastException($"Error: {step.StepSettings.Type} doesn't implement {typeof(ISettings).FullName}");
+                    }
+
+                    ((ISettings)constructorParameterInstance).GroupIdentifier = settings.GroupIdentifier;
+
+                    ((ISettings)constructorParameterInstance).Identifier = settings.Identifier;
                 }
                 catch (Exception ex)
                 {

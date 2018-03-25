@@ -11,39 +11,32 @@ namespace FileOps.Processors.Channels
         private readonly DirectoryInfo _source;
         private readonly DirectoryInfo _target;
         private readonly ChannelSettings _channelSettings;
-        private readonly ChannelDirectionEnum _channelDirection;
+        private readonly DirectoryInfo _workingDirectory;
 
-       
 
-        public LocalChannel(DirectoryInfo processingDirectory, ChannelSettings channelSettings)
+
+
+        public LocalChannel(DirectoryInfo workingDirectory, ChannelSettings channelSettings)
         {
             _channelSettings = channelSettings ?? throw new ArgumentNullException(nameof(channelSettings));
 
-            processingDirectory.ThrowExceptionIfNullOrDoesntExists();
+            ChannelDirectionEnum channelDirection = ChannelDirectionFactory.Get(channelSettings);
 
-            _channelDirection = ChannelDirectionFactory.Get(channelSettings);
-
-            DirectoryInfo settingsDirectory = _channelSettings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists(); 
-
-            if (_channelDirection == ChannelDirectionEnum.Inbound)
+            if (channelDirection == ChannelDirectionEnum.Inbound)
             {
-                _target = processingDirectory;
+                _target = workingDirectory;
 
-                _source = settingsDirectory;
+                _source = _channelSettings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists();
             }
             else
             {
-                _source = processingDirectory;
+                _source = workingDirectory.ThrowExceptionIfNullOrDoesntExists();
 
-                _target = settingsDirectory;
+                _target = _channelSettings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists();
             }
+
         }
 
-        public string SourceFullPath => _source.FullName;
-        public string TargetFullPath => _target.FullName;
-
-
-       
 
         public IEnumerable<FileInfo> Copy(IEnumerable<FileInfo> sourceFiles)
         {
@@ -54,10 +47,10 @@ namespace FileOps.Processors.Channels
             {
                 foreach (FileInfo sourceFile in sourceFiles)
                 {
-                    string targetPath = Path.Combine(_target.FullName, Path.GetFileName(sourceFile.FullName));
+                    string targetPath = Path.Combine(_target.FullName, Path.GetFileName(sourceFile.Name));
 
                     // Copy with overwriting.
-                    File.Create($"{targetPath}{Constants.FileExtensions.FileOps}");
+                    File.Create($"{sourceFile.FullName}{Constants.FileExtensions.FileOps}").Close();
 
                     File.Copy(sourceFile.FullName, targetPath, true);
 
@@ -67,13 +60,7 @@ namespace FileOps.Processors.Channels
             }
             catch (Exception)
             {
-                foreach (FileInfo fileInfo in fileInfoList)
-                {
-                    if (File.Exists(fileInfo.FullName))
-                    {
-                        fileInfo.Delete();
-                    }
-                }
+                Directory.Delete(_target.FullName);
                 throw;
             }
 
@@ -93,12 +80,6 @@ namespace FileOps.Processors.Channels
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<FileInfo> Rename(IEnumerable<FileInfo> sourceFiles)
-        {
-            throw new NotImplementedException();
-        }
-
-
+     
     }
 }

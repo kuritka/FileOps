@@ -8,7 +8,16 @@ namespace FileOps.Pipe
     internal class AggregationRoot : IAggregate
     {
 
+        private readonly Guid _guid;
+
+        public AggregationRoot()
+        {
+            _guid = Guid.NewGuid();
+        }
+
         private readonly IList<IContext> _contexts = new List<IContext>();
+
+        public Guid Guid { get => _guid; }
 
         public void Add(FileInfo leadFile)
         {

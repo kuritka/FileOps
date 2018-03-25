@@ -9,8 +9,6 @@ namespace FileOps.Processors.Channels
 
         IEnumerable<FileInfo> Delete(IEnumerable<FileInfo> sourceFiles);
 
-        IEnumerable<FileInfo> Rename(IEnumerable<FileInfo> sourceFiles);
-
         void CreateSuffixFiles(IEnumerable<FileInfo> sourceFiles);
 
         int GetCount(FileInfo sourceFile);

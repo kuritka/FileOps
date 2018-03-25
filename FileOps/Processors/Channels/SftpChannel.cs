@@ -13,16 +13,14 @@ namespace FileOps.Processors.Channels
         private ChannelDirectionEnum channelDirection;
         private ToSettings channelSettings1;
 
-        public SftpChannel(DirectoryInfo processingDirectory, FromSettings channelSettings, ChannelDirectionEnum channelDirection)
+        public SftpChannel(FromSettings channelSettings, ChannelDirectionEnum channelDirection)
         {
-            this.processingDirectory = processingDirectory;
             this.channelSettings = channelSettings;
             this.channelDirection = channelDirection;
         }
 
-        public SftpChannel(DirectoryInfo processingDirectory, ToSettings channelSettings1, ChannelDirectionEnum channelDirection)
+        public SftpChannel(ToSettings channelSettings1, ChannelDirectionEnum channelDirection)
         {
-            this.processingDirectory = processingDirectory;
             this.channelSettings1 = channelSettings1;
             this.channelDirection = channelDirection;
         }
