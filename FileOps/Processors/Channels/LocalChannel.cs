@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using FileOps.Configuration.Entities;
 using FileOps.Common;
+using System.Linq;
 
 namespace FileOps.Processors.Channels
 {
@@ -12,7 +13,7 @@ namespace FileOps.Processors.Channels
         private readonly DirectoryInfo _target;
         private readonly ChannelSettings _channelSettings;
         private readonly DirectoryInfo _workingDirectory;
-
+        private readonly ChannelDirectionEnum _channelDirection; 
 
 
 
@@ -20,9 +21,9 @@ namespace FileOps.Processors.Channels
         {
             _channelSettings = channelSettings ?? throw new ArgumentNullException(nameof(channelSettings));
 
-            ChannelDirectionEnum channelDirection = ChannelDirectionFactory.Get(channelSettings);
+            _channelDirection = ChannelDirectionFactory.Get(channelSettings);
 
-            if (channelDirection == ChannelDirectionEnum.Inbound)
+            if (_channelDirection == ChannelDirectionEnum.Inbound)
             {
                 _target = workingDirectory;
 
@@ -40,12 +41,14 @@ namespace FileOps.Processors.Channels
 
         public IEnumerable<FileInfo> Copy(IEnumerable<FileInfo> sourceFiles)
         {
-            //Download source directory content to target directory.
             IList<FileInfo> fileInfoList = new List<FileInfo>();
-
             try
             {
-                foreach (FileInfo sourceFile in sourceFiles)
+                var sourceFilesSubset = sourceFiles
+                    .Take(Constants.MaxFileCountToProcess)
+                    .OrderByDescending(d => d.CreationTime);
+
+                foreach (FileInfo sourceFile in sourceFilesSubset)
                 {
                     string targetPath = Path.Combine(_target.FullName, Path.GetFileName(sourceFile.Name));
 
@@ -66,20 +69,41 @@ namespace FileOps.Processors.Channels
 
         }
 
-        public void CreateSuffixFiles(IEnumerable<FileInfo> sourceFiles)
+        public void CreateSuffixFiles(IEnumerable<FileInfo> targetFiles)
         {
-            throw new NotImplementedException();
+            IList<FileInfo> fileInfoList = new List<FileInfo>();
+            if(_channelDirection == ChannelDirectionEnum.Inbound)
+            {
+                throw new InvalidOperationException($"Trying create suufix file for {ChannelDirectionEnum.Inbound} direction");
+            }
+            try
+            {
+                foreach (FileInfo targetFile in targetFiles)
+                {
+                    // Copy with overwriting.
+                    File.Create($"{targetFile.FullName}{((ToSettings)_channelSettings).SuccessFileUploadSuffix}").Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new FileLoadException("Error at creating suffix files ", ex);
+            }
         }
 
-        public IEnumerable<FileInfo> Delete(IEnumerable<FileInfo> sourceFiles)
-        {
-            throw new NotImplementedException();
-        }
 
-        public int GetCount(FileInfo sourceFile)
+        public void Delete(IEnumerable<FileInfo> targetFiles)
         {
-            throw new NotImplementedException();
+            try
+            {
+                foreach (FileInfo targetFile in targetFiles)
+                {
+                    File.Delete(targetFile.FullName);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error at creating suffix files ", ex);
+            }
         }
-     
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using FileOps.Configuration.Entities;
 
 namespace FileOps.Processors.Channels
@@ -35,16 +34,12 @@ namespace FileOps.Processors.Channels
             throw new NotImplementedException();
         }
 
-        public IEnumerable<FileInfo> Delete(IEnumerable<FileInfo> sourceFiles)
+        public void Delete(IEnumerable<FileInfo> sourceFiles)
         {
             throw new NotImplementedException();
         }
 
-        public int GetCount(FileInfo sourceFile)
-        {
-            throw new NotImplementedException();
-        }
-
+    
         public IEnumerable<FileInfo> Rename(IEnumerable<FileInfo> sourceFiles)
         {
             throw new NotImplementedException();
