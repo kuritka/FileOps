@@ -8,7 +8,5 @@ namespace FileOps.Processors.Channels
         IEnumerable<FileInfo> Copy(IEnumerable<FileInfo> sourceFiles);
 
         void Delete(IEnumerable<FileInfo> targetFiles);
-
-        void CreateSuffixFiles(IEnumerable<FileInfo> targetFiles);
     }
 }

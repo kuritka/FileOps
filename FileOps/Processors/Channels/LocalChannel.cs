@@ -50,52 +50,45 @@ namespace FileOps.Processors.Channels
 
                 foreach (FileInfo sourceFile in sourceFilesSubset)
                 {
-                    string targetPath = Path.Combine(_target.FullName, Path.GetFileName(sourceFile.Name));
+                    string targetFilePath = Path.Combine(_target.FullName, Path.GetFileName(sourceFile.Name));
 
                     // Copy with overwriting.
-                    File.Create($"{sourceFile.FullName}{Constants.FileExtensions.FileOps}").Close();
+                    if (_channelDirection == ChannelDirectionEnum.Inbound)
+                    {
+                        File.Create($"{sourceFile.FullName}{Constants.FileExtensions.FileOps}").Close();
+                    }
 
-                    File.Copy(sourceFile.FullName, targetPath, true);
+                    File.Copy(sourceFile.FullName, targetFilePath, true);
 
-                    fileInfoList.Add(new FileInfo(targetPath));
+                    if(_channelDirection == ChannelDirectionEnum.Outbound)
+                    {
+                        string suffix = ((ToSettings)_channelSettings).SuccessFileUploadSuffix;
+                        if (!string.IsNullOrEmpty(suffix))
+                        {
+                            File.Create($"{targetFilePath}{suffix}").Close();
+                        }
+                    }
+
+                    fileInfoList.Add(new FileInfo(targetFilePath));
                 }
                 return fileInfoList;
             }
             catch (Exception)
             {
-                Directory.Delete(_target.FullName);
+                Directory.Delete(_workingDirectory.FullName);
                 throw;
             }
 
         }
 
-        public void CreateSuffixFiles(IEnumerable<FileInfo> targetFiles)
-        {
-            IList<FileInfo> fileInfoList = new List<FileInfo>();
-            if(_channelDirection == ChannelDirectionEnum.Inbound)
-            {
-                throw new InvalidOperationException($"Trying create suufix file for {ChannelDirectionEnum.Inbound} direction");
-            }
-            try
-            {
-                foreach (FileInfo targetFile in targetFiles)
-                {
-                    // Copy with overwriting.
-                    File.Create($"{targetFile.FullName}{((ToSettings)_channelSettings).SuccessFileUploadSuffix}").Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new FileLoadException("Error at creating suffix files ", ex);
-            }
-        }
+      
 
 
-        public void Delete(IEnumerable<FileInfo> targetFiles)
+        public void Delete(IEnumerable<FileInfo> filesToDelete)
         {
             try
             {
-                foreach (FileInfo targetFile in targetFiles)
+                foreach (FileInfo targetFile in filesToDelete)
                 {
                     File.Delete(targetFile.FullName);
                 }
