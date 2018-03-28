@@ -13,7 +13,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
     {
 
         private readonly DirectoryInfo _workingDirectory =
-            new DirectoryInfo(Path.Combine("Channels", "TestData","WorkingDirectory"));
+            new DirectoryInfo(Path.Combine("Channels", "TestData", "WorkingDirectory"));
 
         private readonly DirectoryInfo _fromFolder =
             new DirectoryInfo(Path.Combine("Channels", "TestData", "IN"));
@@ -62,15 +62,15 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Path = _fromFolder.FullName,
                 Type = ConfigChannelType.Local
             };
-            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings );
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
             var files = new DirectoryInfo(channelSettings.Path).GetFiles();
-            
+
             //Act
             var result = channel.Copy(files);
 
             //Assert
             Assert.AreEqual(result.Count(), _testData.GetFiles().Length);
-            Assert.IsTrue(result.Any(d=>d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
             Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
             Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
             Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
@@ -149,7 +149,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
             Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
 
             var _toDataFiles = _toFolder.GetFiles();
-            Assert.AreEqual(_testData.GetFiles().Length*2, _toFolder.GetFiles().Length);
+            Assert.AreEqual(_testData.GetFiles().Length * 2, _toFolder.GetFiles().Length);
             Assert.IsTrue(_toDataFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
             Assert.IsTrue(_toDataFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml_0"));
             Assert.IsTrue(_toDataFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
@@ -165,40 +165,29 @@ namespace FileOps.Tests.IntegrationTests.Channels
 
 
 
-        // [TestMethod]
-        //public void CopyAllInboundFilesTwice()
-        //{
-        //    //Arrange
-        //    var channelSettings = new FromSettings()
-        //    {
-        //        Path = _fromFolder.FullName,
-        //        Type = ConfigChannelType.Local
-        //    };
-        //    LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings );
-        //    var files = new DirectoryInfo(channelSettings.Path).GetFiles();
-            
-        //    //Act
-        //    channel.Copy(files);
-        //    var result = channel.Copy(files);
+        [TestMethod]
+        public void CopyAllInboundFilesTwice()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = _fromFolder.FullName,
+                Type = ConfigChannelType.Local
+            };
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
+            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
-        //    //Assert
-        //    Assert.AreEqual(result.Count(), _testData.GetFiles().Length);
-        //    Assert.IsTrue(result.Any(d=>d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
-        //    Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
-        //    Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
-        //    Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+            //Act
+            var result1 = channel.Copy(files);
+            var result2 = channel.Copy(files);
 
-        //    var _fromDataFiles = _fromFolder.GetFiles();
-        //    Assert.AreEqual(_testData.GetFiles().Length * 2, _fromFolder.GetFiles().Length);
-        //    Assert.IsTrue(_fromDataFiles.Any(d => d.Name == $"EE_FEETRA_TPY_000451-0_18.xml{Constants.FileExtensions.FileOps}"));
-        //    Assert.IsTrue(_fromDataFiles.Any(d => d.Name == $"EE_FEETRA_TPY_000452-0_18.xml{Constants.FileExtensions.FileOps}"));
-        //    Assert.IsTrue(_fromDataFiles.Any(d => d.Name == $"EE_FEETRA_TPY_000454-0_18.XML{Constants.FileExtensions.FileOps}"));
-        //    Assert.IsTrue(_fromDataFiles.Any(d => d.Name == $"GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip{Constants.FileExtensions.FileOps}"));
-        //    Assert.IsTrue(_fromDataFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
-        //    Assert.IsTrue(_fromDataFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
-        //    Assert.IsTrue(_fromDataFiles.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
-        //    Assert.IsTrue(_fromDataFiles.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
-        //}
+            //Assert
+            foreach (var item in result1)
+            {
+                Assert.IsTrue(result2.Any(d => d.Name == item.Name));
+            }
+
+        }
 
     }
 }
