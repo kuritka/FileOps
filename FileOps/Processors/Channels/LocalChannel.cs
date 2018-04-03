@@ -4,6 +4,7 @@ using System.IO;
 using FileOps.Configuration.Entities;
 using FileOps.Common;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FileOps.Processors.Channels
 {
@@ -44,7 +45,18 @@ namespace FileOps.Processors.Channels
             IList<FileInfo> fileInfoList = new List<FileInfo>();
             try
             {
-                var sourceFilesSubset = sourceFiles
+                var sourceFilesSubset =
+                    
+                    _channelDirection == ChannelDirectionEnum.Inbound ?
+                  sourceFiles
+                    .Where(d => 
+                            d.IsMatch(((FromSettings)_channelSettings).FileMask, ((FromSettings)_channelSettings).IgnoreUpperCase ?  RegexOptions.IgnoreCase : RegexOptions.None ) && 
+                           (((FromSettings)_channelSettings).ExclusionFileMasks.IsNullOrEmpty() ? true  : !d.IsMatch(((FromSettings)_channelSettings).ExclusionFileMasks, 
+                           ((FromSettings)_channelSettings).IgnoreUpperCase ? RegexOptions.IgnoreCase : RegexOptions.None)))
+                    .Take(Constants.MaxFileCountToProcess)
+                    .OrderByDescending(d => d.CreationTime)
+
+                : sourceFiles
                     .Take(Constants.MaxFileCountToProcess)
                     .OrderByDescending(d => d.CreationTime);
 

@@ -25,6 +25,10 @@ namespace FileOps.Tests.IntegrationTests.Channels
         private readonly DirectoryInfo _testData =
             new DirectoryInfo(Path.Combine("Common", "Data", "TestDirectory"));
 
+        private readonly DirectoryInfo _fromEmpty =
+         new DirectoryInfo(Path.Combine("Channels", "TestData", "Empty"));
+
+
 
         [TestInitialize]
         public void SetUp()
@@ -42,6 +46,8 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 .CreateIfNotExists();
 
             _testData.CopyContentTo(_fromFolder);
+
+            _fromEmpty.CreateIfNotExists();
         }
 
         [TestCleanup]
@@ -50,6 +56,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
             _workingDirectory.DeleteWithContentIfExists();
             _fromFolder.DeleteWithContentIfExists();
             _toFolder.DeleteWithContentIfExists();
+            _fromEmpty.DeleteWithContentIfExists();
         }
 
 
@@ -161,10 +168,6 @@ namespace FileOps.Tests.IntegrationTests.Channels
         }
 
 
-
-
-
-
         [TestMethod]
         public void CopyAllInboundFilesTwice()
         {
@@ -186,8 +189,226 @@ namespace FileOps.Tests.IntegrationTests.Channels
             {
                 Assert.IsTrue(result2.Any(d => d.Name == item.Name));
             }
+        }
+
+
+
+        [TestMethod]
+        public void CopyByFilemaskOnly()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = _fromFolder.FullName,
+                FileMask = "EE_*_*_*-0_18.xml",
+                Type = ConfigChannelType.Local
+            };
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
+            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
+
+            //Act
+            var result = channel.Copy(files);
+
+            //Assert
+            var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+
+            Assert.AreEqual(6, sourceFiles.Count());
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == $"EE_FEETRA_TPY_000451-0_18.xml{Constants.FileExtensions.FileOps}"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == $"EE_FEETRA_TPY_000452-0_18.xml{Constants.FileExtensions.FileOps}"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+        }
+
+
+        [TestMethod]
+        public void CopyWithExclusionFilemaskOnly()
+        {
+
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = _fromFolder.FullName,
+                ExclusionFileMasks = new string[] { "EE_*_*_*-0_18.xml"},
+                Type = ConfigChannelType.Local
+            };
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
+            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
+
+            //Act
+            var result = channel.Copy(files);
+
+            //Assert
+            var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+
+            Assert.AreEqual(6, sourceFiles.Count());
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == $"GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip{Constants.FileExtensions.FileOps}"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == $"EE_FEETRA_TPY_000454-0_18.XML{Constants.FileExtensions.FileOps}"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
 
         }
 
+        [TestMethod]
+        public void CopyWithExclusionFilemasksOnly()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = _fromFolder.FullName,
+                ExclusionFileMasks = new string[] { "EE_*_*_*-0_18.xml", "*.XML" },
+                Type = ConfigChannelType.Local
+            };
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
+            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
+
+            //Act
+            var result = channel.Copy(files);
+
+            //Assert
+            var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+
+            Assert.AreEqual(5, sourceFiles.Count());
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == $"GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip{Constants.FileExtensions.FileOps}"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+        }
+
+
+
+        [TestMethod]
+        public void CopyWithExclusionFilemaskAndFilemask()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = _fromFolder.FullName,
+                FileMask = "*.zip",
+                ExclusionFileMasks = new string[] { "EE_*_*_*1-0_18.xml", "*.XML" },
+                Type = ConfigChannelType.Local
+            };
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
+            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
+
+            //Act
+            var result = channel.Copy(files);
+
+            //Assert
+            var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+
+            Assert.AreEqual(5, sourceFiles.Count());
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == $"GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip{Constants.FileExtensions.FileOps}"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+        }
+
+
+        [TestMethod]
+        public void CopyWithIgnoreUpperCaseFilemask()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = _fromFolder.FullName,
+                FileMask = "*.ZIP",
+                ExclusionFileMasks = new string[] {"*.XML" },
+                Type = ConfigChannelType.Local,
+                IgnoreUpperCase = true
+
+            };
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
+            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
+
+            //Act
+            var result = channel.Copy(files);
+
+            //Assert
+            var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+
+            Assert.AreEqual(5, sourceFiles.Count());
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == $"GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip{Constants.FileExtensions.FileOps}"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+        }
+
+
+        [TestMethod]
+        public void FilemaskSettedToDoNotFetchAnyFiles()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = _fromFolder.FullName,
+                FileMask = "*.txt",
+                ExclusionFileMasks = new string[] { "*.XML", "*.zip" },
+                Type = ConfigChannelType.Local,
+                IgnoreUpperCase = true
+
+            };
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
+            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
+
+            //Act
+            var result = channel.Copy(files);
+
+            //Assert
+            var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
+            Assert.AreEqual(0, result.Count());
+
+            Assert.AreEqual(4, sourceFiles.Count());
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(sourceFiles.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+        }
+
+
+        [TestMethod]
+        public void CopyFromEmptyDirectoryFilemask()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = _fromEmpty.FullName,
+                FileMask = "*.xml",
+                ExclusionFileMasks = new string[] {  },
+                Type = ConfigChannelType.Local,
+                IgnoreUpperCase = true
+
+            };
+
+            LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
+            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
+
+            //Act
+            var result = channel.Copy(files);
+
+            //Assert
+            var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
+            Assert.AreEqual(0, result.Count());
+
+            Assert.AreEqual(0, sourceFiles.Count());
+        }
     }
 }

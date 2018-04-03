@@ -17,10 +17,10 @@ namespace FileOps.Configuration.Entities
 
         public string[] ExclusionFileMasks { get; set; }
 
-        public bool IgnoreEmptyFiles { get; set; }
-
         public string Identifier { get; set; }
 
         public string GroupIdentifier { get; set; }
+
+        public bool IgnoreUpperCase { get; set; }
     }
 }
