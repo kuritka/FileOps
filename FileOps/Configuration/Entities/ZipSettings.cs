@@ -2,7 +2,7 @@
 {
     public class ZipSettings 
     {
-        public CompressionLevel CompressionLevel { get; set; }
+        public System.IO.Compression.CompressionLevel CompressionLevel { get; set; }
 
         public string Password { get; set; }
 
