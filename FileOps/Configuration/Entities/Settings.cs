@@ -2,17 +2,17 @@
 
 namespace FileOps.Configuration.Entities
 {
-    internal class Settings
+    internal class Settings : ISettings
     {
-        public string Identifier { get; set; }
-
-        public string Group { get; set; }
-
         public bool Enabled { get; set; }
 
         public Step[] Pipe { get; set; }
 
         public CommonRecord[] Common { get; set; }
+
+        public string Identifier { get; set; }
+
+        public string GroupIdentifier { get; set; }
 
         public class Step
         {

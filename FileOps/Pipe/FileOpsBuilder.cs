@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using FileOps.Pipe;
 using System.IO;
 using FileOps.Common;
-using FileOps.Configuration.Entities;
 using FileOps.Configuration;
 
 namespace FileOps

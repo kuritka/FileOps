@@ -3,7 +3,6 @@
 	"Enabled": "True",
 	"TriggerOnStart": "False",
 	"Cron": "*/1 * * * *",
-	"NcaIdentifier": "PRODUCT-IDENTIFIER",
 	"Pipe": [
 		{
 			"StepName": "From",

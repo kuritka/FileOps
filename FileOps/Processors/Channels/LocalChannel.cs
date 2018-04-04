@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using FileOps.Configuration.Entities;
 using FileOps.Common;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FileOps.Processors.Channels
 {
@@ -11,94 +13,102 @@ namespace FileOps.Processors.Channels
         private readonly DirectoryInfo _source;
         private readonly DirectoryInfo _target;
         private readonly ChannelSettings _channelSettings;
-        private readonly ChannelDirectionEnum _channelDirection;
+        private readonly DirectoryInfo _workingDirectory;
+        private readonly ChannelDirectionEnum _channelDirection; 
 
-       
 
-        public LocalChannel(DirectoryInfo processingDirectory, ChannelSettings channelSettings)
+
+        public LocalChannel(DirectoryInfo workingDirectory, ChannelSettings channelSettings)
         {
             _channelSettings = channelSettings ?? throw new ArgumentNullException(nameof(channelSettings));
 
-            processingDirectory.ThrowExceptionIfNullOrDoesntExists();
-
             _channelDirection = ChannelDirectionFactory.Get(channelSettings);
-
-            DirectoryInfo settingsDirectory = _channelSettings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists(); 
 
             if (_channelDirection == ChannelDirectionEnum.Inbound)
             {
-                _target = processingDirectory;
+                _target = workingDirectory;
 
-                _source = settingsDirectory;
+                _source = _channelSettings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists();
             }
             else
             {
-                _source = processingDirectory;
+                _source = workingDirectory.ThrowExceptionIfNullOrDoesntExists();
 
-                _target = settingsDirectory;
+                _target = _channelSettings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists();
             }
+
         }
 
-        public string SourceFullPath => _source.FullName;
-        public string TargetFullPath => _target.FullName;
-
-
-       
 
         public IEnumerable<FileInfo> Copy(IEnumerable<FileInfo> sourceFiles)
         {
-            //Download source directory content to target directory.
             IList<FileInfo> fileInfoList = new List<FileInfo>();
-
             try
             {
-                foreach (FileInfo sourceFile in sourceFiles)
+                var sourceFilesSubset =
+                    
+                    _channelDirection == ChannelDirectionEnum.Inbound ?
+                  sourceFiles
+                    .Where(d => 
+                            d.IsMatch(((FromSettings)_channelSettings).FileMask, ((FromSettings)_channelSettings).IgnoreUpperCase ?  RegexOptions.IgnoreCase : RegexOptions.None ) && 
+                           (((FromSettings)_channelSettings).ExclusionFileMasks.IsNullOrEmpty() ? true  : !d.IsMatch(((FromSettings)_channelSettings).ExclusionFileMasks, 
+                           ((FromSettings)_channelSettings).IgnoreUpperCase ? RegexOptions.IgnoreCase : RegexOptions.None)))
+                    .Take(Constants.MaxFileCountToProcess)
+                    .OrderByDescending(d => d.CreationTime)
+
+                : sourceFiles
+                    .Take(Constants.MaxFileCountToProcess)
+                    .OrderByDescending(d => d.CreationTime);
+
+                foreach (FileInfo sourceFile in sourceFilesSubset)
                 {
-                    string targetPath = Path.Combine(_target.FullName, Path.GetFileName(sourceFile.FullName));
+                    string targetFilePath = Path.Combine(_target.FullName, Path.GetFileName(sourceFile.Name));
 
                     // Copy with overwriting.
-                    File.Create($"{targetPath}{Constants.FileExtensions.FileOps}");
+                    if (_channelDirection == ChannelDirectionEnum.Inbound)
+                    {
+                        File.Create($"{sourceFile.FullName}{Constants.FileExtensions.FileOps}").Close();
+                    }
 
-                    File.Copy(sourceFile.FullName, targetPath, true);
+                    File.Copy(sourceFile.FullName, targetFilePath, true);
 
-                    fileInfoList.Add(new FileInfo(targetPath));
+                    if(_channelDirection == ChannelDirectionEnum.Outbound)
+                    {
+                        string suffix = ((ToSettings)_channelSettings).SuccessFileUploadSuffix;
+                        if (!string.IsNullOrEmpty(suffix))
+                        {
+                            File.Create($"{targetFilePath}{suffix}").Close();
+                        }
+                    }
+
+                    fileInfoList.Add(new FileInfo(targetFilePath));
                 }
                 return fileInfoList;
             }
             catch (Exception)
             {
-                foreach (FileInfo fileInfo in fileInfoList)
-                {
-                    if (File.Exists(fileInfo.FullName))
-                    {
-                        fileInfo.Delete();
-                    }
-                }
+                Directory.Delete(_workingDirectory.FullName);
                 throw;
             }
 
         }
 
-        public void CreateSuffixFiles(IEnumerable<FileInfo> sourceFiles)
+      
+
+
+        public void Delete(IEnumerable<FileInfo> filesToDelete)
         {
-            throw new NotImplementedException();
+            try
+            {
+                foreach (FileInfo targetFile in filesToDelete)
+                {
+                    File.Delete(targetFile.FullName);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error at creating suffix files ", ex);
+            }
         }
-
-        public IEnumerable<FileInfo> Delete(IEnumerable<FileInfo> sourceFiles)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetCount(FileInfo sourceFile)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<FileInfo> Rename(IEnumerable<FileInfo> sourceFiles)
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

@@ -49,9 +49,29 @@ namespace FileOps.Common
 
         public static bool IsMatch(this FileInfo file, string mask, RegexOptions regexOptions = RegexOptions.None)
         {
+            if (string.IsNullOrEmpty(mask))
+            {
+                return true;
+            }
             string regexPattern = mask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".") + "$";
             Match match = Regex.Match(file.Name, regexPattern, regexOptions);
             return match.Success;
+        }
+
+
+        public static bool IsMatch(this FileInfo file, string [] masks, RegexOptions regexOptions = RegexOptions.None)
+        {
+            if (masks == null)
+            {
+                return true;
+            }
+
+            bool result = false;
+            foreach (var mask in masks)
+            {
+                result |= IsMatch(file, mask, regexOptions);
+            }
+            return result;
         }
     }
 }

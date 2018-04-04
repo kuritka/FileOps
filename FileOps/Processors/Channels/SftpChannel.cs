@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using FileOps.Configuration.Entities;
 
 namespace FileOps.Processors.Channels
@@ -13,16 +12,14 @@ namespace FileOps.Processors.Channels
         private ChannelDirectionEnum channelDirection;
         private ToSettings channelSettings1;
 
-        public SftpChannel(DirectoryInfo processingDirectory, FromSettings channelSettings, ChannelDirectionEnum channelDirection)
+        public SftpChannel(FromSettings channelSettings, ChannelDirectionEnum channelDirection)
         {
-            this.processingDirectory = processingDirectory;
             this.channelSettings = channelSettings;
             this.channelDirection = channelDirection;
         }
 
-        public SftpChannel(DirectoryInfo processingDirectory, ToSettings channelSettings1, ChannelDirectionEnum channelDirection)
+        public SftpChannel(ToSettings channelSettings1, ChannelDirectionEnum channelDirection)
         {
-            this.processingDirectory = processingDirectory;
             this.channelSettings1 = channelSettings1;
             this.channelDirection = channelDirection;
         }
@@ -37,16 +34,12 @@ namespace FileOps.Processors.Channels
             throw new NotImplementedException();
         }
 
-        public IEnumerable<FileInfo> Delete(IEnumerable<FileInfo> sourceFiles)
+        public void Delete(IEnumerable<FileInfo> sourceFiles)
         {
             throw new NotImplementedException();
         }
 
-        public int GetCount(FileInfo sourceFile)
-        {
-            throw new NotImplementedException();
-        }
-
+    
         public IEnumerable<FileInfo> Rename(IEnumerable<FileInfo> sourceFiles)
         {
             throw new NotImplementedException();

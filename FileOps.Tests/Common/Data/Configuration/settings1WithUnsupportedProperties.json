@@ -1,10 +1,10 @@
 {
-	"Identifier": "IDENTIFIER1_Domain_Dev_Source_TARGET",
-	"Enabled": "True",
-	"someUnsupportedValue": "False",
-	"Pipe": [
-		{
-			"StepName": "From",
+  "Identifier": "IDENTIFIER1_Domain_Dev_Source_TARGET",
+  "Enabled": "True",
+  "GroupIdentifier": "",
+  "Pipe": [
+    {
+      "StepName": "From",
       "StepSettings": {
         "Type": "sftp",
         "Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_IN",
@@ -16,23 +16,23 @@
         "LocalBackupPath": "/home/FileOps/FTP_Copy/Inbound/Source/PRODUCT-IDENTIFIER",
         "CreateFileMappingInMongo": "True"
       }
-		},
-		{
-			"StepName": "Zip",
-			"StepSettings": {
-				"AddExtension": "False"
-			}
-		},
-		{
-			"StepName": "To",
-			"StepSettings": {
-				"Type": "sftp",
-				"Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_OUT",
-				"Host": "10.112.4.200",
-				"UserName": "ec2-user",
-				"PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
-				"LocalBackupPath": "/home/FileOps/FTP_Copy/Outbound/TARGET/PRODUCT-IDENTIFIER"
-			}
-		}
-	]
+    },
+    {
+      "StepName": "Zip",
+      "StepSettings": {
+        "AddExtension": "False"
+      }
+    },
+    {
+      "StepName": "To",
+      "StepSettings": {
+        "Type": "sftp",
+        "Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_OUT",
+        "Host": "10.112.4.200",
+        "UserName": "ec2-user",
+        "PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
+        "LocalBackupPath": "/home/FileOps/FTP_Copy/Outbound/TARGET/PRODUCT-IDENTIFIER"
+      }
+    }
+  ]
 }
