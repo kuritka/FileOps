@@ -14,6 +14,7 @@ namespace FileOps.Tests
 
 
         [TestMethod]
+        [Ignore]
         public void BuildFileOpsManager()
         {
 
@@ -34,6 +35,7 @@ namespace FileOps.Tests
 
 
         [TestMethod]
+        [Ignore]
         public void BuildMultipleFileOpsManagers()
         {
             var steps1 = new FileOpsBuilder()

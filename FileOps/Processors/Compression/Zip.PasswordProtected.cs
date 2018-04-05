@@ -42,7 +42,7 @@ namespace Beamer.Infrastructure.Compression
 
             compressedFileName.ThrowExceptionIfExtensionIsDifferentFrom(Constants.FileExtensions.Zip);
 
-            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             using (ZipFile zip = new ZipFile(compressedFileName.FullName))
             {

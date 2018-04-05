@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EMIRReport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.impendiumsystems.com/2012/emirreporting file:///E:/Builds/8/ImpendiumTFS/70BugfixMapREMIT/src/Software/Client/SchemaFiles/RegulationSpecificInbound/REMITRegReporting.xsd" xmlns="http://www.impendiumsystems.com/2012/emirreporting">
+	<EMIREntry>
+		<CommonData>
+			<SourceTradeID>20160902D1</SourceTradeID>
+			<Backload>false</Backload>
+			<ActionType>N</ActionType>
+			<TransactionType>Trade</TransactionType>
+			<ETDIndicator>OTC Bilateral</ETDIndicator>
+			<UniqueTradeID>20160902D1</UniqueTradeID>
+		</CommonData>
+		<Counterparty>
+			<Counterparty1ID>A00025348.BG</Counterparty1ID>
+			<TraderIDforMarketParticipant>Trader01</TraderIDforMarketParticipant>
+			<Counterparty2ID>A00033664.BG</Counterparty2ID>
+			<ReportingEntityID>B0000221J.LU</ReportingEntityID>
+			<TradingCapacity>P</TradingCapacity>
+			<CounterpartySide>B</CounterpartySide>
+		</Counterparty>
+		<ContractType>
+			<ContractID>2016-XBIL</ContractID>
+		</ContractType>
+		<TransactionDetails>
+			<Venue>XBIL</Venue>
+			<PriceRateSpread>0.333</PriceRateSpread>
+			<PriceNotation>GBP</PriceNotation>
+			<Notional>340000</Notional>
+			<NotionalCurrency1>GBP</NotionalCurrency1>
+			<TransactionTS>2016-07-27T00:00:00-01:00</TransactionTS>
+			<LifecycleEvent>N</LifecycleEvent>
+			<TotalNotionalContractQuantity>400000</TotalNotionalContractQuantity>
+			<TotalNotionalQuantityUnit>MWh</TotalNotionalQuantityUnit>
+		</TransactionDetails>
+		<Commodities>
+			<ContractCapacity>340000</ContractCapacity>
+			<DailyHourlyQuantity>MW</DailyHourlyQuantity>
+		</Commodities>
+		<Order />
+		<PriceTimeIntervalQuantities>
+			<IntervalStartDate>2005-01-01</IntervalStartDate>
+			<IntervalEndDate>2017-09-30</IntervalEndDate>
+			<IntervalTimes>
+				<intervalStartTime>10:00:00-01:00</intervalStartTime>
+				<intervalEndTime>10:00:00-01:00</intervalEndTime>
+			</IntervalTimes>
+			<IntervalCapacity>10000</IntervalCapacity>
+			<IntervalCapacityQuantityUnit>cm/d</IntervalCapacityQuantityUnit>
+			<IntervalPriceValue>40</IntervalPriceValue>
+			<IntervalCurrency>PCT</IntervalCurrency>
+		</PriceTimeIntervalQuantities>
+		<FixingDetails>
+			<FixingIndexSource>ESGM</FixingIndexSource>
+		</FixingDetails>
+	</EMIREntry>
+</EMIRReport>

@@ -66,6 +66,33 @@
     <None Update="Common\Data\TestDirectory\GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="IntegrationTests\Compression\Data\EBRD_EMIR_Trades_20170712.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\Compression\Data\EBRD_EMIR_Trades_20170809.gz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\Compression\Data\EBRD_EMIR_Trades_20170809.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\Compression\Data\EBRD_EMIR_Trades_20170809Case.Gz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\Compression\Data\EBRD_EMIR_Trades_20170809Case.Zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\Compression\Data\TestData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\Compression\Data\TestData2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\Compression\Data\testFile1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\Compression\Data\testFile2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="IntegrationTests\FileOpsManager\Data\settings2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
