@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace FileOps.Processors.Compression
 {
-	public class Zip : ICompressor
+	internal class Zip : ICompressor
 	{
 		private const string DefaultExtension = ".zip";
 

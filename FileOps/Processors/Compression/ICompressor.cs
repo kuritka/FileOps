@@ -4,7 +4,7 @@ using System.IO;
 
 namespace FileOps.Processors.Compression
 {
-	public interface ICompressor
+	internal interface ICompressor
 	{
         OneOrZeroElementCollection<FileInfo> Compress(IEnumerable<FileInfo> filesToCompress, FileInfo compressedFileName);
 

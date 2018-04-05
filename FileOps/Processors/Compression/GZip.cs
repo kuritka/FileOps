@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace FileOps.Processors.Compression
 {
-	public class GZip : ICompressor
+	internal class GZip : ICompressor
 	{
 		private const string DefaultExtension = ".gz";
 

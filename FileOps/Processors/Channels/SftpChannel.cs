@@ -2,45 +2,47 @@
 using System.Collections.Generic;
 using System.IO;
 using FileOps.Configuration.Entities;
+using Renci.SshNet;
+using FileOps.Common;
 
 namespace FileOps.Processors.Channels
 {
     internal class SftpChannel : IChannel
     {
-        private DirectoryInfo processingDirectory;
-        private FromSettings channelSettings;
-        private ChannelDirectionEnum channelDirection;
-        private ToSettings channelSettings1;
+        private const string ConnectionErrorMessage = "Connection to SFTP not established.";
+        private const string TmpExtension = ".tmp";
+        private readonly ChannelSettings _channelSettings;
+        private readonly ChannelDirectionEnum _channelDirection;
+        private readonly DirectoryInfo _source;
+        private readonly DirectoryInfo _target;
+        private readonly ConnectionInfo _connectionInfo;
 
-        public SftpChannel(FromSettings channelSettings, ChannelDirectionEnum channelDirection)
+
+        public SftpChannel(DirectoryInfo workingDirectory, ChannelSettings channelSettings)
         {
-            this.channelSettings = channelSettings;
-            this.channelDirection = channelDirection;
+            _channelSettings = channelSettings ?? throw new ArgumentNullException(nameof(channelSettings));
+
+            _channelDirection = ChannelDirectionFactory.Get(channelSettings);
+
+            _source = ChannelHelper.GetSourceOrTarget(_channelSettings, workingDirectory).Item1;
+
+            _target = ChannelHelper.GetSourceOrTarget(_channelSettings, workingDirectory).Item2;
+
+
+            
         }
 
-        public SftpChannel(ToSettings channelSettings1, ChannelDirectionEnum channelDirection)
-        {
-            this.channelSettings1 = channelSettings1;
-            this.channelDirection = channelDirection;
-        }
+
 
         public IEnumerable<FileInfo> Copy(IEnumerable<FileInfo> sourceFiles)
         {
+            using (SftpClient client = new SftpClient(_connectionInfo))
+            {
+            }
             throw new NotImplementedException();
         }
 
-        public void CreateSuffixFiles(IEnumerable<FileInfo> sourceFiles)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(IEnumerable<FileInfo> sourceFiles)
-        {
-            throw new NotImplementedException();
-        }
-
-    
-        public IEnumerable<FileInfo> Rename(IEnumerable<FileInfo> sourceFiles)
+        public void Delete(IEnumerable<FileInfo> targetFiles)
         {
             throw new NotImplementedException();
         }

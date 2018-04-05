@@ -13,9 +13,7 @@ namespace FileOps.Processors.Channels
         private readonly DirectoryInfo _source;
         private readonly DirectoryInfo _target;
         private readonly ChannelSettings _channelSettings;
-        private readonly DirectoryInfo _workingDirectory;
         private readonly ChannelDirectionEnum _channelDirection; 
-
 
 
         public LocalChannel(DirectoryInfo workingDirectory, ChannelSettings channelSettings)
@@ -24,19 +22,9 @@ namespace FileOps.Processors.Channels
 
             _channelDirection = ChannelDirectionFactory.Get(channelSettings);
 
-            if (_channelDirection == ChannelDirectionEnum.Inbound)
-            {
-                _target = workingDirectory;
+            _source = ChannelHelper.GetSourceOrTarget(_channelSettings, workingDirectory).Item1;
 
-                _source = _channelSettings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists();
-            }
-            else
-            {
-                _source = workingDirectory.ThrowExceptionIfNullOrDoesntExists();
-
-                _target = _channelSettings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists();
-            }
-
+            _target = ChannelHelper.GetSourceOrTarget(_channelSettings, workingDirectory).Item2;
         }
 
 

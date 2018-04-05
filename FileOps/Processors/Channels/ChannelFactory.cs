@@ -20,17 +20,10 @@ namespace FileOps.Processors.Channels
                 {
                     return new LocalChannel(workingDirectory, channelSettings);
                 }
-                //case ConfigChannelType.Sftp:
-                //    {
-                //        if (channelDirection == ChannelDirectionEnum.Inbound)
-                //        {
-                //            return new SftpChannel(processingDirectory,(FromSettings) channelSettings, channelDirection);
-                //        }
-                //        else
-                //        {
-                //            return new SftpChannel(processingDirectory, (ToSettings)channelSettings, channelDirection);
-                //        }
-                //    }
+                case ConfigChannelType.Sftp:
+                {
+                    return new SftpChannel(workingDirectory, channelSettings);
+                }
                 default:
                     {
                         throw new InvalidOperationException($"There is no corresponding channel type for '{channelSettings.Type}'.");
