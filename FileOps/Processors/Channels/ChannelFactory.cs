@@ -12,7 +12,7 @@ namespace FileOps.Processors.Channels
 
             if (workingDirectory == null) throw new ArgumentNullException(nameof(workingDirectory));
 
-            ChannelDirectionEnum channelDirection = channelSettings.GetType() == typeof(FromSettings) ? ChannelDirectionEnum.Inbound : ChannelDirectionEnum.Outbound;
+            ChannelDirection channelDirection = channelSettings.GetType() == typeof(FromSettings) ? ChannelDirection.Inbound : ChannelDirection.Outbound;
 
             switch (channelSettings.Type)
             {
@@ -25,9 +25,9 @@ namespace FileOps.Processors.Channels
                     return new SftpChannel(workingDirectory, channelSettings);
                 }
                 default:
-                    {
-                        throw new InvalidOperationException($"There is no corresponding channel type for '{channelSettings.Type}'.");
-                    }
+                {
+                    throw new InvalidOperationException($"There is no corresponding channel type for '{channelSettings.Type}'.");
+                }
             }
         }
     }

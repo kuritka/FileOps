@@ -66,6 +66,12 @@
     <None Update="Common\Data\TestDirectory\GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Common\key.ppk">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Common\key.private">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="IntegrationTests\Compression\Data\EBRD_EMIR_Trades_20170712.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

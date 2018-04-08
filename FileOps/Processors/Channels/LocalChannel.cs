@@ -13,12 +13,15 @@ namespace FileOps.Processors.Channels
         private readonly DirectoryInfo _source;
         private readonly DirectoryInfo _target;
         private readonly ChannelSettings _channelSettings;
-        private readonly ChannelDirectionEnum _channelDirection; 
+        private readonly ChannelDirection _channelDirection;
+        private readonly DirectoryInfo _workingDirectory;
 
 
         public LocalChannel(DirectoryInfo workingDirectory, ChannelSettings channelSettings)
         {
             _channelSettings = channelSettings ?? throw new ArgumentNullException(nameof(channelSettings));
+
+            _workingDirectory = workingDirectory ?? throw new ArgumentNullException(nameof(channelSettings));
 
             _channelDirection = ChannelDirectionFactory.Get(channelSettings);
 
@@ -28,23 +31,23 @@ namespace FileOps.Processors.Channels
         }
 
 
-        public IEnumerable<FileInfo> Copy(IEnumerable<FileInfo> sourceFiles)
+        public IEnumerable<FileInfo> Copy()
         {
             IList<FileInfo> fileInfoList = new List<FileInfo>();
             try
             {
                 var sourceFilesSubset =
-                    
-                    _channelDirection == ChannelDirectionEnum.Inbound ?
-                  sourceFiles
-                    .Where(d => 
-                            d.IsMatch(((FromSettings)_channelSettings).FileMask, ((FromSettings)_channelSettings).IgnoreUpperCase ?  RegexOptions.IgnoreCase : RegexOptions.None ) && 
-                           (((FromSettings)_channelSettings).ExclusionFileMasks.IsNullOrEmpty() ? true  : !d.IsMatch(((FromSettings)_channelSettings).ExclusionFileMasks, 
+
+                    _channelDirection == ChannelDirection.Inbound ?
+                  new DirectoryInfo(_channelSettings.Path).GetFiles()
+                    .Where(d =>
+                            d.IsMatch(((FromSettings)_channelSettings).FileMask, ((FromSettings)_channelSettings).IgnoreUpperCase ? RegexOptions.IgnoreCase : RegexOptions.None) &&
+                           (((FromSettings)_channelSettings).ExclusionFileMasks.IsNullOrEmpty() ? true : !d.IsMatch(((FromSettings)_channelSettings).ExclusionFileMasks,
                            ((FromSettings)_channelSettings).IgnoreUpperCase ? RegexOptions.IgnoreCase : RegexOptions.None)))
                     .Take(Constants.MaxFileCountToProcess)
                     .OrderByDescending(d => d.CreationTime)
 
-                : sourceFiles
+                : _workingDirectory.GetFiles()
                     .Take(Constants.MaxFileCountToProcess)
                     .OrderByDescending(d => d.CreationTime);
 
@@ -53,14 +56,14 @@ namespace FileOps.Processors.Channels
                     string targetFilePath = Path.Combine(_target.FullName, Path.GetFileName(sourceFile.Name));
 
                     // Copy with overwriting.
-                    if (_channelDirection == ChannelDirectionEnum.Inbound)
+                    if (_channelDirection == ChannelDirection.Inbound)
                     {
                         File.Create($"{sourceFile.FullName}{Constants.FileExtensions.FileOps}").Close();
                     }
 
                     File.Copy(sourceFile.FullName, targetFilePath, true);
 
-                    if(_channelDirection == ChannelDirectionEnum.Outbound)
+                    if (_channelDirection == ChannelDirection.Outbound)
                     {
                         string suffix = ((ToSettings)_channelSettings).SuccessFileUploadSuffix;
                         if (!string.IsNullOrEmpty(suffix))
@@ -81,7 +84,7 @@ namespace FileOps.Processors.Channels
 
         }
 
-      
+
 
 
         public void Delete(IEnumerable<FileInfo> filesToDelete)

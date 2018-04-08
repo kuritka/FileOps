@@ -12,7 +12,7 @@ namespace FileOps.Processors.Channels
         {
             var channelDirection = ChannelDirectionFactory.Get(settings);
 
-            if (channelDirection == ChannelDirectionEnum.Inbound)
+            if (channelDirection == ChannelDirection.Inbound)
             {
                 return (settings.Path.AsDirectoryInfo().ThrowExceptionIfNullOrDoesntExists(),
                     workingDirectory);

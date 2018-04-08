@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Processors.Channels
 {
-    internal enum ChannelDirectionEnum
+    internal enum ChannelDirection
     {
         Inbound,
         Outbound

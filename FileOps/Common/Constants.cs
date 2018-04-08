@@ -20,5 +20,13 @@
             public const string FileOps = ".FileOps.tmp";
         }
 
+        public static class Timeouts
+        {
+            //ssh fails when any operation takes more than 6 minutes.
+            public const int SshOperationTimeoutInMinutes = 6;
+
+
+        }
+
     }
 }

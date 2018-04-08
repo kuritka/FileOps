@@ -5,12 +5,12 @@ namespace FileOps.Processors.Channels
 {
     internal static class ChannelDirectionFactory
     {
-        public static ChannelDirectionEnum Get(ChannelSettings channelSettings)
+        public static ChannelDirection Get(ChannelSettings channelSettings)
         {
             if(channelSettings.GetType().Name == typeof(FromSettings).Name)
-                return ChannelDirectionEnum.Inbound;
+                return ChannelDirection.Inbound;
             else if (channelSettings.GetType().Name == typeof(ToSettings).Name)
-                    return ChannelDirectionEnum.Outbound;
+                    return ChannelDirection.Outbound;
             throw new InvalidCastException($"Invalid channel direction {channelSettings.GetType().Name}");
         }
 

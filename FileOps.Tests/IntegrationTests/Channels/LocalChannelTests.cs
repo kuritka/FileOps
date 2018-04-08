@@ -70,10 +70,10 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Type = ConfigChannelType.Local
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
+            //var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             Assert.AreEqual(result.Count(), _testData.GetFiles().Length);
@@ -109,10 +109,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
             };
             _testData.CopyContentTo(_workingDirectory);
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = _workingDirectory.GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             Assert.AreEqual(result.Count(), _testData.GetFiles().Length);
@@ -143,10 +142,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
             };
             _testData.CopyContentTo(_workingDirectory);
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = _workingDirectory.GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             Assert.AreEqual(result.Count(), _testData.GetFiles().Length);
@@ -178,11 +176,10 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Type = ConfigChannelType.Local
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result1 = channel.Copy(files);
-            var result2 = channel.Copy(files);
+            var result1 = channel.Copy();
+            var result2 = channel.Copy();
 
             //Assert
             foreach (var item in result1)
@@ -204,10 +201,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Type = ConfigChannelType.Local
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
@@ -237,10 +233,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Type = ConfigChannelType.Local
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
@@ -269,10 +264,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Type = ConfigChannelType.Local
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
@@ -301,10 +295,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Type = ConfigChannelType.Local
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
@@ -334,10 +327,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
 
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
@@ -367,10 +359,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
 
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();
@@ -399,10 +390,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
             };
 
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
-            var files = new DirectoryInfo(channelSettings.Path).GetFiles();
 
             //Act
-            var result = channel.Copy(files);
+            var result = channel.Copy();
 
             //Assert
             var sourceFiles = new DirectoryInfo(channelSettings.Path).GetFiles();

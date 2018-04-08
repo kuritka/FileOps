@@ -42,7 +42,7 @@ namespace FileOps.Steps.From
             //    _target = settingsDirectory;
             //}
 
-            channel.Copy(null);
+            channel.Copy();
             throw new System.NotImplementedException();
         }
     }

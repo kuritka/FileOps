@@ -5,7 +5,7 @@ namespace FileOps.Processors.Channels
 {
     internal interface IChannel
     {
-        IEnumerable<FileInfo> Copy(IEnumerable<FileInfo> sourceFiles);
+        IEnumerable<FileInfo> Copy();
 
         void Delete(IEnumerable<FileInfo> targetFiles);
     }
