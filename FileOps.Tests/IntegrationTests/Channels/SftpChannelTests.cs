@@ -2,11 +2,8 @@
 using FileOps.Configuration.Entities;
 using FileOps.Processors.Channels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace FileOps.Tests.IntegrationTests.Channels
 {
@@ -19,21 +16,30 @@ namespace FileOps.Tests.IntegrationTests.Channels
           new DirectoryInfo(Path.Combine("Channels", "TestData", "WorkingDirectory"));
 
 
-        private readonly DirectoryInfo _fromFolder =
-         new DirectoryInfo(Path.Combine("Channels", "TestData", "IN"));
+        private readonly DirectoryInfo _testData =
+           new DirectoryInfo(Path.Combine("Common", "Data", "TestDirectory"));
+
 
         //private readonly DirectoryInfo _testData =
         //   new DirectoryInfo(Path.Combine("Common", "Data", "TestDirectory"));
+
+        private readonly FromSettings _fromSettings = new FromSettings()
+        {
+                Path = "/home/ec2-user/From",
+                Type = ConfigChannelType.Sftp,
+                PrivateKey = Path.Combine("Common", "key.private"),
+                Host = "127.0.0.1",
+                Port = 22,
+                UserName = "ec2-user",
+            };
+
 
 
         [TestInitialize]
         public void SetUp()
         {
-            _workingDirectory
-                .DeleteWithContentIfExists()
-                .CreateIfNotExists();
-
-            _fromFolder
+         
+            _fromSettings
                 .DeleteWithContentIfExists()
                 .CreateIfNotExists();
 
@@ -41,7 +47,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
             //    .DeleteWithContentIfExists()
             //    .CreateIfNotExists();
 
-            //_testData.CopyContentTo(_fromFolder);
+            _testData.CopyContentTo(_fromSettings);
 
             //_fromEmpty.CreateIfNotExists();
         }
@@ -51,7 +57,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
         public void TearDown()
         {
             _workingDirectory.DeleteWithContentIfExists();
-            _fromFolder.DeleteWithContentIfExists();
+            _fromSettings.DeleteWithContentIfExists();
         }
 
 
@@ -68,6 +74,9 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Port=22,
                 UserName= "ec2-user",
             };
+
+            _workingDirectory.DeleteWithContentIfExists().CreateIfNotExists();
+
             SftpChannel sftp = new SftpChannel(_workingDirectory, channelSettings);
             //Act
             var result = sftp.Copy();
@@ -76,6 +85,28 @@ namespace FileOps.Tests.IntegrationTests.Channels
         }
 
 
+        [TestMethod]
+        public void CopyFromSftp()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = "/home/ec2-user/From",
+                Type = ConfigChannelType.Sftp,
+                PrivateKey = Path.Combine("Common", "key.private"),
+                Host = "127.0.0.1",
+                Port = 22,
+                UserName = "ec2-user",
+            };
+
+            _workingDirectory.DeleteWithContentIfExists().CreateIfNotExists();
+
+            SftpChannel sftp = new SftpChannel(_workingDirectory, channelSettings);
+            //Act
+            var result = sftp.Copy();
+            //Assert
+            Assert.IsTrue(!result.Any());
+        }
 
 
     }
