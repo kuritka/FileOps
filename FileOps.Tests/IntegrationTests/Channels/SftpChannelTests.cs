@@ -43,13 +43,8 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 .DeleteWithContentIfExists()
                 .CreateIfNotExists();
 
-            //_toFolder
-            //    .DeleteWithContentIfExists()
-            //    .CreateIfNotExists();
-
             _testData.CopyContentTo(_fromSettings);
 
-            //_fromEmpty.CreateIfNotExists();
         }
 
 
@@ -105,7 +100,11 @@ namespace FileOps.Tests.IntegrationTests.Channels
             //Act
             var result = sftp.Copy();
             //Assert
-            Assert.IsTrue(!result.Any());
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+
         }
 
 

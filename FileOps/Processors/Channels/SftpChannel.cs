@@ -92,7 +92,7 @@ namespace FileOps.Processors.Channels
 
             foreach (var fileToDownload in filesToSort)
             {
-                var downloaded = Path.Combine(_target.FullName, fileToDownload.Name);
+                var downloaded = Path.Combine(_source, fileToDownload.Name);
                 using (FileStream stream = new FileStream(fileToDownload.Name, FileMode.Create))
                 {
                     client.DownloadFile(downloaded, stream);
