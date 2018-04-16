@@ -41,9 +41,9 @@ namespace FileOps.Processors.Channels
                     _channelDirection == ChannelDirection.Inbound ?
                   new DirectoryInfo(_channelSettings.Path).GetFiles()
                     .Where(d =>
-                            d.IsMatch(((FromSettings)_channelSettings).FileMask, ((FromSettings)_channelSettings).IgnoreUpperCase ? RegexOptions.IgnoreCase : RegexOptions.None) &&
+                            d.IsMatch(((FromSettings)_channelSettings).FileMask, ((FromSettings)_channelSettings).IgnoreCaseSensitive ? RegexOptions.IgnoreCase : RegexOptions.None) &&
                            (((FromSettings)_channelSettings).ExclusionFileMasks.IsNullOrEmpty() ? true : !d.IsMatch(((FromSettings)_channelSettings).ExclusionFileMasks,
-                           ((FromSettings)_channelSettings).IgnoreUpperCase ? RegexOptions.IgnoreCase : RegexOptions.None)))
+                           ((FromSettings)_channelSettings).IgnoreCaseSensitive ? RegexOptions.IgnoreCase : RegexOptions.None)))
                     .Take(Constants.MaxFileCountToProcess)
                     .OrderByDescending(d => d.CreationTime)
 

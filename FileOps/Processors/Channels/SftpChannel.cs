@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using FileOps.Common;
 using FileOps.Configuration.Entities;
 using Renci.SshNet;
@@ -110,7 +111,8 @@ namespace FileOps.Processors.Channels
 
         private bool IsFileMatch(string fileName, string fileMask)
         {
-            return string.IsNullOrEmpty(fileMask) || new FileInfo(fileName).IsMatch(((FromSettings)_channelSettings).FileMask);
+            return string.IsNullOrEmpty(fileMask) || 
+                new FileInfo(fileName).IsMatch(((FromSettings)_channelSettings).FileMask, ((FromSettings)_channelSettings ).IgnoreCaseSensitive ? RegexOptions.IgnoreCase : RegexOptions.None);
         }
     }
 }

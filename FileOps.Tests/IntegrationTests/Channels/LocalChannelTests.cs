@@ -323,7 +323,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 FileMask = "*.ZIP",
                 ExclusionFileMasks = new string[] {"*.XML" },
                 Type = ConfigChannelType.Local,
-                IgnoreUpperCase = true
+                IgnoreCaseSensitive = true
 
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
@@ -355,7 +355,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 FileMask = "*.txt",
                 ExclusionFileMasks = new string[] { "*.XML", "*.zip" },
                 Type = ConfigChannelType.Local,
-                IgnoreUpperCase = true
+                IgnoreCaseSensitive = true
 
             };
             LocalChannel channel = new LocalChannel(_workingDirectory, channelSettings);
@@ -385,7 +385,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 FileMask = "*.xml",
                 ExclusionFileMasks = new string[] {  },
                 Type = ConfigChannelType.Local,
-                IgnoreUpperCase = true
+                IgnoreCaseSensitive = true
 
             };
 

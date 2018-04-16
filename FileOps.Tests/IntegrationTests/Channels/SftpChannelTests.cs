@@ -81,7 +81,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
 
 
         [TestMethod]
-        public void CopyFromSftp()
+        public void CopyAllInboundFromSftp()
         {
             //Arrange
             var channelSettings = new FromSettings()
@@ -107,6 +107,101 @@ namespace FileOps.Tests.IntegrationTests.Channels
 
         }
 
+
+
+
+        [TestMethod]
+        public void CopyByFilemaskOnly()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = "/home/ec2-user/From",
+                Type = ConfigChannelType.Sftp,
+                PrivateKey = Path.Combine("Common", "key.private"),
+                Host = "127.0.0.1",
+                Port = 22,
+                UserName = "ec2-user",
+                FileMask = "EE_*_*_*-0_18.xml",
+            };
+
+            _workingDirectory.DeleteWithContentIfExists().CreateIfNotExists();
+
+            SftpChannel sftp = new SftpChannel(_workingDirectory, channelSettings);
+            //Act
+            var result = sftp.Copy();
+            //Assert
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+        }
+
+
+
+        [TestMethod]
+        public void CopyByFilemaskUppercase()
+        {
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = "/home/ec2-user/From",
+                Type = ConfigChannelType.Sftp,
+                PrivateKey = Path.Combine("Common", "key.private"),
+                Host = "127.0.0.1",
+                Port = 22,
+                UserName = "ec2-user",
+                FileMask = "EE_*_*_*-0_18.xml",
+                IgnoreCaseSensitive = true
+            };
+
+            _workingDirectory.DeleteWithContentIfExists().CreateIfNotExists();
+
+            SftpChannel sftp = new SftpChannel(_workingDirectory, channelSettings);
+            //Act
+            var result = sftp.Copy();
+            //Assert
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+        }
+
+
+
+        [TestMethod]
+        public void CopyWithExclusionFilemaskOnly()
+        {
+
+          
+            //Arrange
+            var channelSettings = new FromSettings()
+            {
+                Path = "/home/ec2-user/From",
+                Type = ConfigChannelType.Sftp,
+                PrivateKey = Path.Combine("Common", "key.private"),
+                Host = "127.0.0.1",
+                Port = 22,
+                UserName = "ec2-user",
+                FileMask = "EE_*_*_*-0_18.xml",
+                IgnoreCaseSensitive = true
+            };
+
+            _workingDirectory.DeleteWithContentIfExists().CreateIfNotExists();
+
+            SftpChannel sftp = new SftpChannel(_workingDirectory, channelSettings);
+            //Act
+            var result = sftp.Copy();
+            //Assert
+            Assert.IsTrue(result.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            Assert.IsTrue(result.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+
+            //Assert.AreEqual(6, _from.Count());
+            //Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000451-0_18.xml"));
+            //Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000452-0_18.xml"));
+            //Assert.IsTrue(sourceFiles.Any(d => d.Name == $"GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip{Constants.FileExtensions.FileOps}"));
+            //Assert.IsTrue(sourceFiles.Any(d => d.Name == $"EE_FEETRA_TPY_000454-0_18.XML{Constants.FileExtensions.FileOps}"));
+            //Assert.IsTrue(sourceFiles.Any(d => d.Name == "EE_FEETRA_TPY_000454-0_18.XML"));
+            //Assert.IsTrue(sourceFiles.Any(d => d.Name == "GG_TR_529900G3SW56SHYNPR95_01_20180316_0014_01.zip"));
+
+        }
 
     }
 }
