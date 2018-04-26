@@ -21,6 +21,6 @@ namespace FileOps.Configuration.Entities
 
         public string GroupIdentifier { get; set; }
 
-        public bool IgnoreUpperCase { get; set; }
+        public bool IgnoreCaseSensitive { get; set; }
     }
 }
