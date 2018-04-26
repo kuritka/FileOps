@@ -27,6 +27,8 @@ namespace FileOps.Steps.From
 
             workingDirectory.Create();
 
+            toProcess.AttachWorkingDirectory(workingDirectory);
+
             IChannel channel = ChannelFactory.Create(_settings, workingDirectory);
 
             //if (_channelDirection == ChannelDirectionEnum.Inbound)

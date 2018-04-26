@@ -10,6 +10,8 @@ namespace FileOps.Pipe
 
         private readonly Guid _guid;
 
+        private DirectoryInfo _workingDirectory;
+
         public AggregationRoot()
         {
             _guid = Guid.NewGuid();
@@ -18,6 +20,8 @@ namespace FileOps.Pipe
         private readonly IList<IContext> _contexts = new List<IContext>();
 
         public Guid Guid { get => _guid; }
+
+        public DirectoryInfo WorkingDirectory => _workingDirectory;
 
         public void Add(FileInfo leadFile)
         {
@@ -35,6 +39,18 @@ namespace FileOps.Pipe
         public void AddOrUpdate()
         {
             throw new NotImplementedException();
+        }
+
+        public void AttachWorkingDirectory(DirectoryInfo directory)
+        {
+            if(_workingDirectory == null)
+            {
+                _workingDirectory = directory;
+            }
+            else
+            {
+                throw new InvalidOperationException("Working directory can be attached only once.");
+            }
         }
     }
 }

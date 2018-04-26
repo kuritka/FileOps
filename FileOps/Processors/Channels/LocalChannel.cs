@@ -85,8 +85,6 @@ namespace FileOps.Processors.Channels
         }
 
 
-
-
         public void Delete(IEnumerable<FileInfo> filesToDelete)
         {
             try

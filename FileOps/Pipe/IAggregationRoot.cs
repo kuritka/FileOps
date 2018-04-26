@@ -12,5 +12,9 @@ namespace FileOps.Pipe
         void AddOrUpdate();
 
         Guid Guid { get;}
+
+        void AttachWorkingDirectory(DirectoryInfo directory);
+
+        DirectoryInfo WorkingDirectory { get; }
     }
 }
