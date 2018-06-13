@@ -10,12 +10,21 @@ namespace FileOps.Steps.UnZip
 
         public UnZip(ZipSettings settings)
         {
-            _settings = settings;
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public IAggregate Execute(IAggregate toProcess)
+        public IAggregate Execute(IAggregate aggregate)
         {
-            throw new NotImplementedException();
+            var compressor = new Processors.Compression.ZipFactory(_settings).Get();
+
+            foreach (var file in aggregate.Current.Files)
+            {
+                var uncompressedFiles =  compressor.Decompress(file, aggregate.WorkingDirectory);
+
+                aggregate.Add(uncompressedFiles);
+            }
+
+            return aggregate;
         }
     }
 }

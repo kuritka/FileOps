@@ -17,18 +17,17 @@ namespace FileOps.Pipe
             _steps.AddLast(new TearDown());
         }
 
-        public Action<IAggregate> OnStepProcessed;
+        public Action<IAggregate> OnStepProcessed { get; set; }
 
-        public Action<IAggregate> OnStart;
+        public Action<IAggregate> OnStart { get; set; }
 
-        public Action<IAggregate> OnEnd;
+        public Action<IAggregate> OnEnd { get; set; }
 
-        public Action<IAggregate, Exception> OnExceptionOccured;
+        public Action<IAggregate, Exception> OnExceptionOccured { get; set; }
 
         public void Execute()
         {
-
-            OnStart.Invoke(_aggregate);
+           OnStart?.Invoke(_aggregate);
 
             try
             {
@@ -36,17 +35,20 @@ namespace FileOps.Pipe
                 {
                     _aggregate = step.Execute(_aggregate);
 
-                    OnStepProcessed.Invoke(_aggregate);
+                    OnStepProcessed?.Invoke(_aggregate);
                 }
 
                 _aggregate.WorkingDirectory.DeleteWithContentIfExists();
             }
             catch (Exception ex)
             {
-                OnExceptionOccured.Invoke(_aggregate, ex);
+                OnExceptionOccured?.Invoke(_aggregate, ex);
+#if DEBUG
+                throw;
+#endif
             }
 
-            OnEnd.Invoke(_aggregate);
+            OnEnd?.Invoke(_aggregate);
         }
 
         public IFileOpsManager AddStep(IStep<IAggregate, IAggregate> step)
@@ -57,5 +59,6 @@ namespace FileOps.Pipe
         }
 
         public IAggregate Context => _aggregate;
+
     }
 }

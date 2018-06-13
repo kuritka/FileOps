@@ -12,24 +12,35 @@ namespace FileOps.Pipe
 
         private DirectoryInfo _workingDirectory;
 
+
         public AggregationRoot()
         {
             _guid = Guid.NewGuid();
         }
 
-        private readonly IList<IContext> _contexts = new List<IContext>();
+        private readonly IList<IStepContext> _contexts = new List<IStepContext>();
 
         public Guid Guid { get => _guid; }
 
         public DirectoryInfo WorkingDirectory => _workingDirectory;
 
-        public void Add(FileInfo leadFile)
+        public void Add(FileInfo file)
         {
-            leadFile.ThrowExceptionIfNullOrDoesntExists()
+            file.ThrowExceptionIfNullOrDoesntExists()
                 .ThrowExceptionIfFileSizeExceedsMB(Constants.OneGB);
 
-            _contexts.Add(new Context(leadFile));
+            _contexts.Add(new StepContext(file));
         }
+
+        public void Add(IEnumerable<FileInfo> files)
+        {
+            foreach (var file in files)
+            {
+                Add(file);
+            }
+        }
+
+        public IStepContext Current => _contexts[_contexts.Count - 1];
 
         public void Load()
         {

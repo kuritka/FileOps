@@ -24,9 +24,12 @@ namespace FileOps.Common
 
         public static FileInfo ThrowExceptionIfFileSizeExceedsMB(this FileInfo file, uint megaBytes)
         {
-            if (file.Length > megaBytes * 1024 * 1024)
+            checked
             {
-                throw new ArgumentException($"File size {file.Name} exceeds {megaBytes}MB limit");
+                if (file.Length > megaBytes * 1024 * 1024)
+                {
+                    throw new ArgumentException($"File size {file.Name} exceeds {megaBytes}MB limit");
+                }
             }
             return file;
         }

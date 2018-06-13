@@ -1,7 +1,10 @@
-﻿
+﻿using System.Collections.Generic;
+using System.IO;
+
 namespace FileOps.Pipe
 {
-    internal interface IContext 
+    public interface IStepContext 
     {
+        IEnumerable<FileInfo> Files { get; }
     }
 }

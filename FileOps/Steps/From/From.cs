@@ -11,41 +11,28 @@ namespace FileOps.Steps.From
 
         private readonly FromSettings _settings;
 
-        private DirectoryInfo _workingDirectory;
-
         public From(FromSettings settings)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            
         }
 
 
-        public IAggregate Execute(IAggregate toProcess)
+        public IAggregate Execute(IAggregate aggregate)
         {
 
-            DirectoryInfo workingDirectory = new DirectoryInfo($"{_settings.Identifier}_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{toProcess.Guid:N}");
+            DirectoryInfo workingDirectory = new DirectoryInfo($"{_settings.Identifier}_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{aggregate.Guid:N}");
 
             workingDirectory.Create();
 
-            toProcess.AttachWorkingDirectory(workingDirectory);
+            aggregate.AttachWorkingDirectory(workingDirectory);
 
             IChannel channel = ChannelFactory.Create(_settings, workingDirectory);
 
-            //if (_channelDirection == ChannelDirectionEnum.Inbound)
-            //{
-            //    _target = processingDirectory;
+            var processedFiles = channel.Copy();
 
-            //    _source = settingsDirectory;
-            //}
-            //else
-            //{
-            //    _source = processingDirectory;
+            aggregate.Add(processedFiles);
 
-            //    _target = settingsDirectory;
-            //}
-
-            channel.Copy();
-            throw new System.NotImplementedException();
+            return aggregate;
         }
     }
 }

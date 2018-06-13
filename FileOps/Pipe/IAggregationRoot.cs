@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FileOps.Pipe
 {
     public interface IAggregate
     {
-        void Add(FileInfo leadFile);
+        void Add(FileInfo file);
+
+        void Add(IEnumerable<FileInfo> files);
 
         void Load();
 
@@ -16,5 +19,7 @@ namespace FileOps.Pipe
         void AttachWorkingDirectory(DirectoryInfo directory);
 
         DirectoryInfo WorkingDirectory { get; }
+
+        IStepContext Current { get; }
     }
 }

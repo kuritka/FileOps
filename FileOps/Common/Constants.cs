@@ -2,7 +2,7 @@
 {
     internal static class Constants
     {
-        public const int OneMB = 1024 * 1024;
+        public const int OneMB = 1;
         public const int OneGB = OneMB * 1024;
 
         public const int MaxFileCountToProcess = 20;

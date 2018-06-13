@@ -1,6 +1,8 @@
 ﻿using FileOps.Configuration.Entities;
 using FileOps.Processors.Channels;
 using Renci.SshNet;
+using Renci.SshNet.Sftp;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -11,6 +13,7 @@ namespace FileOps.Common
 
         public static ChannelSettings DeleteWithContentIfExists(this ChannelSettings target)
         {
+
             var info = target.AsConnectionInfo();
             using (SftpClient client = new SftpClient(info))
             {
@@ -77,5 +80,12 @@ namespace FileOps.Common
                 }
             }
         }
+
+
+        public static void CopyContentTo(this ChannelSettings source, DirectoryInfo directory)
+        {
+             new SftpChannel(directory, source).Copy();
+        }
+
     }
 }

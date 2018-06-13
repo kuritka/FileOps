@@ -1,32 +1,44 @@
 ﻿using FileOps.Common;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FileOps.Pipe
 {
-    internal class Context : IContext
+    public class StepContext : IStepContext
     {
-        private readonly FileInfo _leadingFile;
+        private readonly List<FileInfo> _files = new List<FileInfo>();
 
-        private readonly Guid _guid;
+        private readonly Guid _guid = Guid.NewGuid();
 
-        private readonly DateTime _processingDate;
+        private readonly DateTime _processingDate = DateTime.UtcNow;
 
-        public Context(FileInfo leadingFile)
+
+        public StepContext(IEnumerable<FileInfo> files)
         {
-            leadingFile.ThrowExceptionIfNullOrDoesntExists()
-                .ThrowExceptionIfFileSizeExceedsMB(Constants.OneGB);
+            files.ThrowExceptionIfNull();
 
-            _guid = Guid.NewGuid();
-
-            _leadingFile = leadingFile;
-
-            _processingDate = DateTime.UtcNow;
+            foreach (var file in files)
+            {
+                AttachFile(file);
+            };
         }
 
-        public FileInfo File => _leadingFile;
+        public StepContext(FileInfo file)
+        {
+            AttachFile(file);
+        }
+
+        private void AttachFile(FileInfo file)
+        {
+            file.ThrowExceptionIfNullOrDoesntExists()
+                .ThrowExceptionIfFileSizeExceedsMB(Constants.OneGB);
+
+            _files.Add(file);
+        }
 
 
+        public IEnumerable<FileInfo> Files => _files;
         
     }
 }

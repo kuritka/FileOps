@@ -1,7 +1,6 @@
 ﻿using FileOps.Configuration.Entities;
 using FileOps.Pipe;
 using System;
-using System.Collections.Generic;
 
 namespace FileOps.Steps.Zip
 {

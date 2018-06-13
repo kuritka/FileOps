@@ -77,7 +77,18 @@ namespace FileOps.Processors.Channels
 
         private IEnumerable<FileInfo> CopyTo(IEnumerable<FileInfo> files, SftpClient client)
         {
-            throw new NotImplementedException();
+            if (!client.IsConnected) throw new Exception(ConnectionErrorMessage);
+
+            client.ChangeDirectory(_channelSettings.Path);
+
+            foreach (FileInfo file in files)
+            {
+                using (var fileStream = new FileStream(file.FullName, FileMode.Open))
+                {
+                    client.UploadFile(fileStream, $"{file.Name}");
+                }
+            }
+            return files;
         }
 
         private IEnumerable<FileInfo> CopyFrom(IEnumerable<SftpFile> sftpFiles, SftpClient client)
@@ -91,12 +102,13 @@ namespace FileOps.Processors.Channels
                 filesToSort.Add(new FileInfo(resultFileName));
             }
 
-            foreach (var fileToDownload in filesToSort)
+            foreach (var filteredFiles in filesToSort)
             {
-                var downloaded = Path.Combine(_source, fileToDownload.Name);
-                using (FileStream stream = new FileStream(fileToDownload.Name, FileMode.Create))
+                var toDownload = Path.Combine(_source, filteredFiles.Name);
+                var downloaded =  Path.Combine(_workingDirectory.FullName, filteredFiles.Name);
+                using (FileStream stream = new FileStream(downloaded, FileMode.Create))
                 {
-                    client.DownloadFile(downloaded, stream);
+                    client.DownloadFile(toDownload, stream);
                 }
                 downloadedFiles.Add(new FileInfo(downloaded));
             }
@@ -111,8 +123,22 @@ namespace FileOps.Processors.Channels
 
         private bool IsFileMatch(string fileName, string fileMask)
         {
-            return string.IsNullOrEmpty(fileMask) || 
-                new FileInfo(fileName).IsMatch(((FromSettings)_channelSettings).FileMask, ((FromSettings)_channelSettings ).IgnoreCaseSensitive ? RegexOptions.IgnoreCase : RegexOptions.None);
+            var fromSettings = (FromSettings)_channelSettings;
+            if (!fromSettings.ExclusionFileMasks.IsNullOrEmpty())
+            {
+                var result = true;
+                foreach (var item in fromSettings.ExclusionFileMasks)
+                {
+                    if(string.IsNullOrEmpty(item))
+                        result = result || string.IsNullOrEmpty(fileMask) || !new FileInfo(fileName).IsMatch(fromSettings.FileMask, ((FromSettings)_channelSettings).IgnoreCaseSensitive ? RegexOptions.IgnoreCase : RegexOptions.None);
+                }
+                return result;
+            }
+            else
+            {
+                return string.IsNullOrEmpty(fileMask) ||
+                    new FileInfo(fileName).IsMatch(fromSettings.FileMask, ((FromSettings)_channelSettings).IgnoreCaseSensitive ? RegexOptions.IgnoreCase : RegexOptions.None);
+            }
         }
     }
 }

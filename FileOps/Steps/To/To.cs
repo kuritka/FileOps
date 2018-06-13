@@ -1,7 +1,7 @@
 ﻿using FileOps.Configuration.Entities;
 using FileOps.Pipe;
+using FileOps.Processors.Channels;
 using System;
-using System.Collections.Generic;
 
 namespace FileOps.Steps.To
 {
@@ -11,12 +11,17 @@ namespace FileOps.Steps.To
 
         public To(ToSettings settings)
         {
-            _settings = settings;
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         public IAggregate Execute(IAggregate toProcess)
         {
-            throw new NotImplementedException();
+            IChannel channel = ChannelFactory.Create(_settings, toProcess.WorkingDirectory);
+            
+            channel.Copy();
+
+            return toProcess;
+
         }
     }
 }
