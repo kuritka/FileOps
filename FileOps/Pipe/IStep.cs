@@ -2,9 +2,8 @@
 
 namespace FileOps.Pipe
 {
-    public interface IStep<out TOut, in TIn> 
-       where TOut : IAggregate
+    public interface IStep
     {
-        TOut Execute(TIn toProcess);        
+        void Execute(IStepContext stepContext);        
     }
 }

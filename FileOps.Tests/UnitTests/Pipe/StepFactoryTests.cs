@@ -23,7 +23,7 @@ namespace FileOps.Tests.UnitTests.Pipe
                 .Get(FileProvider.Configuration.SettingsZipping.AsOneItemList());
 
             //Act
-            IEnumerable<IStep<IAggregate, IAggregate>> steps = new StepFactory().Get(settings);
+            IEnumerable<IStep> steps = new StepFactory().Get(settings);
 
             //Assert
             Assert.AreEqual(3, steps.Count());
@@ -46,7 +46,7 @@ namespace FileOps.Tests.UnitTests.Pipe
                 .Get(configuration);
 
             //Act
-            IEnumerable<IStep<IAggregate, IAggregate>> steps = new StepFactory().Get(settings);
+            IEnumerable<IStep> steps = new StepFactory().Get(settings);
 
             //Assert
             Assert.AreEqual(3, steps.Count());
@@ -61,7 +61,7 @@ namespace FileOps.Tests.UnitTests.Pipe
                 .Get(FileProvider.Configuration.SharedSettings.AsOneItemList());
 
             //Act
-            IEnumerable<IStep<IAggregate, IAggregate>> steps = new StepFactory().Get(settings);
+            IEnumerable<IStep> steps = new StepFactory().Get(settings);
 
             //Assert
             Assert.AreEqual(steps.Count(), 0);
@@ -77,7 +77,7 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Arrange
             //Act
             //Assert
-            IEnumerable<IStep<IAggregate, IAggregate>> steps = new StepFactory().Get(null);
+            IEnumerable<IStep> steps = new StepFactory().Get(null);
         }
 
 
@@ -89,7 +89,7 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Arrange
             //Act
             //Assert
-            IEnumerable<IStep<IAggregate, IAggregate>> steps = new StepFactory().Get(new Settings());
+            IEnumerable<IStep> steps = new StepFactory().Get(new Settings());
         }
 
 
@@ -100,7 +100,7 @@ namespace FileOps.Tests.UnitTests.Pipe
             //Arrange
             //Act
             //Assert
-            IEnumerable<IStep<IAggregate, IAggregate>> steps = new StepFactory().Get(new Settings());
+            IEnumerable<IStep> steps = new StepFactory().Get(new Settings());
         }
 
 
@@ -118,7 +118,7 @@ namespace FileOps.Tests.UnitTests.Pipe
                 .Get(configFiles);
 
             //Act
-            IEnumerable<IStep<IAggregate, IAggregate>> steps = new StepFactory().Get(settings).ToList();
+            IEnumerable<IStep> steps = new StepFactory().Get(settings).ToList();
 
             //Assert
             Assert.AreEqual(3, steps.Count());

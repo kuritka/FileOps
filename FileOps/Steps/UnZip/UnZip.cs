@@ -4,7 +4,7 @@ using System;
 
 namespace FileOps.Steps.UnZip
 {
-    public class UnZip : IStep<IAggregate, IAggregate>
+    public class UnZip : IStep
     {
         ZipSettings _settings;
 
@@ -13,18 +13,16 @@ namespace FileOps.Steps.UnZip
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public IAggregate Execute(IAggregate aggregate)
+        public void Execute(IStepContext context)
         {
             var compressor = new Processors.Compression.ZipFactory(_settings).Get();
 
-            foreach (var file in aggregate.Current.Files)
+            foreach (var file in context.PreviousFiles)
             {
-                var uncompressedFiles =  compressor.Decompress(file, aggregate.WorkingDirectory);
+                var uncompressedFiles =  compressor.Decompress(file, context.WorkingDirectory);
 
-                aggregate.Add(uncompressedFiles);
+                context.Attach(uncompressedFiles);
             }
-
-            return aggregate;
         }
     }
 }

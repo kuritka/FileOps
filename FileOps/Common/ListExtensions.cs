@@ -17,6 +17,7 @@ namespace FileOps.Common
             return list == null || !list.Any();
         }
 
+
         public static IList<T> ThrowExceptionIfNull<T>(this IEnumerable<T> list)
         {
             if (list == null) throw new ArgumentNullException($"{nameof(list)}");

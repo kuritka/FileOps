@@ -6,7 +6,7 @@ namespace FileOps
 {
     public interface IFileOpsBuilder
     {
-        LinkedList<IStep<IAggregate, IAggregate>> Build();
+        LinkedList<IStep> Build();
 
         IFileOpsBuilder AddConfiguration(FileInfo jsonFile);
     }

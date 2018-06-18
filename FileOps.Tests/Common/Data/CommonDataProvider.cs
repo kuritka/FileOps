@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using FileOps.Configuration.Entities;
+using System.IO;
 
 namespace FileOps.Tests.Common.Data
 {
@@ -31,6 +32,45 @@ namespace FileOps.Tests.Common.Data
             public static readonly FileInfo SettingsZippingWithReferences = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1WithReferences.json"));
 
             public static readonly FileInfo SettingsZippingWithReferencesShared = new FileInfo(Path.Combine("Common", "Data", "Configuration", "settings1WithReferences.Shared.json"));
+           
+        }
+
+
+        public static class Sftp
+        {
+
+            public static readonly FromSettings FromSettings = new FromSettings()
+            {
+                Path = "/home/ec2-user/From",
+                Type = ConfigChannelType.Sftp,
+                PrivateKey = new DirectoryInfo(Path.Combine("Common", "key.private")).FullName,
+                Host = "127.0.0.1",
+                Port = 22,
+                UserName = "ec2-user",
+            };
+
+
+            public static readonly FromSettings EmptySettings = new FromSettings()
+            {
+                Path = "/home/ec2-user/Empty",
+                Type = ConfigChannelType.Sftp,
+                PrivateKey = new DirectoryInfo(Path.Combine("Common", "key.private")).FullName,
+                Host = "127.0.0.1",
+                Port = 22,
+                UserName = "ec2-user",
+            };
+
+
+
+            public static readonly FromSettings ToSettings = new FromSettings()
+            {
+                Path = "/home/ec2-user/To",
+                Type = ConfigChannelType.Sftp,
+                PrivateKey = new DirectoryInfo(Path.Combine("Common", "key.private")).FullName,
+                Host = "127.0.0.1",
+                Port = 22,
+                UserName = "ec2-user",
+            };
         }
 
     }

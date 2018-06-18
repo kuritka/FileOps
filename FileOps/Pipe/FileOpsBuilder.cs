@@ -35,15 +35,15 @@ namespace FileOps
         }
 
 
-        public LinkedList<IStep<IAggregate, IAggregate>> Build()
+        public LinkedList<IStep> Build()
         {
             IStepFactory stepFactory = new StepFactory();
 
             var settings = new ConfigurationFactory().Get(_configFiles.Values);
 
             var steps = stepFactory.Get(settings);
-
-            return new LinkedList<IStep<IAggregate, IAggregate>>(steps);
+            
+            return new LinkedList<IStep>(steps);
         }
     }
 }

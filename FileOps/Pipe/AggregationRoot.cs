@@ -1,4 +1,4 @@
-﻿using FileOps.Common;
+﻿using FileOps.Steps.Init;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,59 +9,51 @@ namespace FileOps.Pipe
     {
 
         private readonly Guid _guid;
-
+        private readonly string _identifier;
         private DirectoryInfo _workingDirectory;
 
+        private readonly Stack<IStepContext> _contexts = new Stack<IStepContext>();
 
-        public AggregationRoot()
+        private readonly IStepContext _emptyStepContext;
+
+
+        public AggregationRoot(string identifier)
         {
             _guid = Guid.NewGuid();
-        }
 
-        private readonly IList<IStepContext> _contexts = new List<IStepContext>();
+            _identifier = string.IsNullOrEmpty(identifier) ? throw new ArgumentNullException($"{identifier}") : identifier;
+
+            AttachWorkingDirectory();
+
+            _emptyStepContext = new StepContext(new Init(), _guid, _workingDirectory);
+
+            _contexts.Push(_emptyStepContext);
+        }
 
         public Guid Guid { get => _guid; }
 
         public DirectoryInfo WorkingDirectory => _workingDirectory;
 
-        public void Add(FileInfo file)
+        public IStepContext Current => _contexts.Peek();
+        
+        public void ExecuteStep(IStep step)
         {
-            file.ThrowExceptionIfNullOrDoesntExists()
-                .ThrowExceptionIfFileSizeExceedsMB(Constants.OneGB);
+            if (step == null) throw new ArgumentNullException($"{step}");
 
-            _contexts.Add(new StepContext(file));
+            IStepContext currentContext = new StepContext(Current);
+
+            _contexts.Push(currentContext);
+
+            step.Execute(currentContext);
         }
 
-        public void Add(IEnumerable<FileInfo> files)
-        {
-            foreach (var file in files)
-            {
-                Add(file);
-            }
-        }
 
-        public IStepContext Current => _contexts[_contexts.Count - 1];
 
-        public void Load()
+        private void AttachWorkingDirectory()
         {
-            throw new NotImplementedException();
-        }
+            DirectoryInfo workingDirectory = new DirectoryInfo($"{_identifier}_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{_guid:N}");
 
-        public void AddOrUpdate()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AttachWorkingDirectory(DirectoryInfo directory)
-        {
-            if(_workingDirectory == null)
-            {
-                _workingDirectory = directory;
-            }
-            else
-            {
-                throw new InvalidOperationException("Working directory can be attached only once.");
-            }
+            _workingDirectory = workingDirectory;
         }
     }
 }

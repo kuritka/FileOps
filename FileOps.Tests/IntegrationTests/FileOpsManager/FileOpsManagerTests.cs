@@ -1,4 +1,3 @@
-using FileOps.Common;
 using FileOps.Pipe;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
@@ -24,7 +23,7 @@ namespace FileOps.Tests
                 .AddConfiguration(_sharedSettings)
                 .Build();
 
-            IFileOpsManager manager = new FileOpsManager(steps);
+            IFileOpsManager manager = new FileOpsManager(steps, "identifier");
             
             //Act
             manager.Execute();
@@ -43,14 +42,14 @@ namespace FileOps.Tests
                 .AddConfiguration(_sharedSettings)
                 .Build();
 
-            IFileOpsManager manager1 = new FileOpsManager(steps1);
+            IFileOpsManager manager1 = new FileOpsManager(steps1, "identifier");
 
             var steps2 = new FileOpsBuilder()
               .AddConfiguration(_settings1)
               .AddConfiguration(_sharedSettings)
               .Build();
 
-            IFileOpsManager manager2 = new FileOpsManager(steps1);
+            IFileOpsManager manager2 = new FileOpsManager(steps1, "identifier");
 
             manager1.Execute();
 

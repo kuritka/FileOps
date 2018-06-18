@@ -1,8 +1,6 @@
 ﻿using FileOps.Configuration.Entities;
 using FileOps.Processors.Channels;
 using Renci.SshNet;
-using Renci.SshNet.Sftp;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -13,8 +11,8 @@ namespace FileOps.Common
 
         public static ChannelSettings DeleteWithContentIfExists(this ChannelSettings target)
         {
-
             var info = target.AsConnectionInfo();
+
             using (SftpClient client = new SftpClient(info))
             {
                 client.Connect();
@@ -22,6 +20,24 @@ namespace FileOps.Common
                 if (client.Exists(target.Path))
                 {
                     DeleteRecoursively(target.Path, client);
+                }
+            }
+            return target;
+        }
+
+
+
+        public static ChannelSettings DeleteOneFile(this ChannelSettings target, FileInfo fileInfo)
+        {
+            var info = target.AsConnectionInfo();
+
+            using (SftpClient client = new SftpClient(info))
+            {
+                client.Connect();
+
+                if (client.Exists(target.Path))
+                {
+                    client.DeleteFile(Path.Combine(target.Path, fileInfo.Name));
                 }
             }
             return target;

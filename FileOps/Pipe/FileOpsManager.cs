@@ -7,13 +7,16 @@ namespace FileOps.Pipe
 {
     public class FileOpsManager : IFileOpsManager
     {
-        private readonly LinkedList<IStep<IAggregate, IAggregate>> _steps;
+        private readonly LinkedList<IStep> _steps;
 
-        private IAggregate _aggregate = new AggregationRoot();
+        private IAggregate _aggregate;
 
-        public FileOpsManager(LinkedList<IStep<IAggregate, IAggregate>> steps)
+        public FileOpsManager(LinkedList<IStep> steps, string identifier)
         {
+            _aggregate = new AggregationRoot(identifier);
+
             _steps = steps?? throw new ArgumentNullException(nameof(steps));
+
             _steps.AddLast(new TearDown());
         }
 
@@ -33,7 +36,9 @@ namespace FileOps.Pipe
             {
                 foreach (var step in _steps)
                 {
-                    _aggregate = step.Execute(_aggregate);
+                    _aggregate.ExecuteStep(step);
+
+                    //_aggregate = step.Execute(_aggregate);
 
                     OnStepProcessed?.Invoke(_aggregate);
                 }
@@ -51,7 +56,7 @@ namespace FileOps.Pipe
             OnEnd?.Invoke(_aggregate);
         }
 
-        public IFileOpsManager AddStep(IStep<IAggregate, IAggregate> step)
+        public IFileOpsManager AddStep(IStep step)
         {
             if (step == null) throw new ArgumentNullException(nameof(step));
             _steps.AddLast(step);

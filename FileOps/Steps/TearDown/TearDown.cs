@@ -1,15 +1,12 @@
 ﻿using FileOps.Pipe;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FileOps.Steps.TearDown
 {
-    internal class TearDown : IStep<IAggregate, IAggregate>
+    internal class TearDown : IStep
     {
-        public IAggregate Execute(IAggregate toProcess)
+        public void Execute(IStepContext context)
         {
-            return toProcess;
+            
         }
     }
 }

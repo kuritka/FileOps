@@ -4,7 +4,7 @@ using System;
 
 namespace FileOps.Steps.Zip
 {
-    public class Zip : IStep<IAggregate, IAggregate>
+    public class Zip : IStep
     {
         ZipSettings _settings;
 
@@ -13,7 +13,7 @@ namespace FileOps.Steps.Zip
             _settings = settings;
         }
 
-        public IAggregate Execute(IAggregate toProcess)
+        public void Execute(IStepContext context)
         {
             throw new NotImplementedException();
         }

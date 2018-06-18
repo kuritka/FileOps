@@ -1,6 +1,7 @@
 ﻿using FileOps.Common;
 using FileOps.Configuration.Entities;
 using FileOps.Processors.Channels;
+using FileOps.Tests.Common.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
@@ -43,6 +44,10 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 .DeleteWithContentIfExists()
                 .CreateIfNotExists();
 
+            FileProvider.Sftp.EmptySettings
+              .DeleteWithContentIfExists()
+              .CreateIfNotExists();
+
             _testData.CopyContentTo(_fromSettings);
 
         }
@@ -53,6 +58,7 @@ namespace FileOps.Tests.IntegrationTests.Channels
         {
             _workingDirectory.DeleteWithContentIfExists();
             _fromSettings.DeleteWithContentIfExists();
+            FileProvider.Sftp.EmptySettings.DeleteWithContentIfExists();
         }
 
 
@@ -180,8 +186,8 @@ namespace FileOps.Tests.IntegrationTests.Channels
                 Host = "127.0.0.1",
                 Port = 22,
                 UserName = "ec2-user",
-                FileMask = "EE_*_*_*-0_18.xml",
-                IgnoreCaseSensitive = true
+                ExclusionFileMasks = new []{ "EE_*_*_*-0_18.xml" },
+                IgnoreCaseSensitive = false
             };
 
             _workingDirectory.DeleteWithContentIfExists().CreateIfNotExists();

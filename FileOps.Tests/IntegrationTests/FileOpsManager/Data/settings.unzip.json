@@ -1,0 +1,39 @@
+{
+	"Identifier": "IDENTIFIER_Tra_Dev_Stat_TARGET",
+	"Enabled": "True",
+	"TriggerOnStart": "False",
+	"Cron": "*/1 * * * *",
+	"NcaIdentifier": "PRODUCT-IDENTIFIER",
+	"Pipe": [ 
+		{
+			"StepName": "From",
+      "StepSettings": {
+        "Type": "sftp",
+        "Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_IN",
+        "Host": "10.112.4.200",
+        "Port": 22,
+        "UserName": "ec2-user",
+        "PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
+        "FileMask": "*.zip",
+        "LocalBackupPath": "/home/FileOps/FTP_Copy/Inbound/Source/PRODUCT-IDENTIFIER",
+        "CreateFileMappingInMongo": "True"
+      }
+		},
+		{
+			"StepName": "UnZip",
+			"StepSettings": {
+			}
+		},
+		{
+			"StepName": "To",
+			"StepSettings": {
+				"Type": "sftp",
+				"Path": "/home/ec2-user/FTP/Inbound/BEL_FSMA_Tra_Dev_OUT",
+				"Host": "10.112.4.200",
+				"UserName": "ec2-user",
+				"PrivateKey": "/opt/FileOps/Release/Configuration/DEV/key.pem",
+				"LocalBackupPath": "/home/FileOps/FTP_Copy/Outbound/TARGET/PRODUCT-IDENTIFIER"
+			}
+		}
+	]
+}

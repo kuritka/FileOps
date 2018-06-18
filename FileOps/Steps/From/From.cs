@@ -2,11 +2,10 @@
 using FileOps.Pipe;
 using FileOps.Processors.Channels;
 using System;
-using System.IO;
 
 namespace FileOps.Steps.From
 {
-    public class From : IStep<IAggregate, IAggregate>
+    public class From : IStep
     {
 
         private readonly FromSettings _settings;
@@ -17,22 +16,15 @@ namespace FileOps.Steps.From
         }
 
 
-        public IAggregate Execute(IAggregate aggregate)
+        public void Execute(IStepContext context)
         {
+            context.WorkingDirectory.Create();
 
-            DirectoryInfo workingDirectory = new DirectoryInfo($"{_settings.Identifier}_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{aggregate.Guid:N}");
-
-            workingDirectory.Create();
-
-            aggregate.AttachWorkingDirectory(workingDirectory);
-
-            IChannel channel = ChannelFactory.Create(_settings, workingDirectory);
+            IChannel channel = ChannelFactory.Create(_settings, context.WorkingDirectory);
 
             var processedFiles = channel.Copy();
 
-            aggregate.Add(processedFiles);
-
-            return aggregate;
+            context.Attach(processedFiles);
         }
     }
 }

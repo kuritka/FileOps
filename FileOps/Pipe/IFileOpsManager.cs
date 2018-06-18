@@ -6,7 +6,7 @@ namespace FileOps.Pipe
     {
         void Execute();
 
-        IFileOpsManager AddStep(IStep<IAggregate, IAggregate> step);
+        IFileOpsManager AddStep(IStep step);
 
         IAggregate Context { get;  }
 

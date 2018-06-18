@@ -16,12 +16,12 @@ namespace FileOps.Pipe
         public StepFactory()
         {
             _stepTypes = AssemblyHelper
-                .GetDerivedTypesFor(typeof(IStep<IAggregate, IAggregate>))
+                .GetDerivedTypesFor(typeof(IStep))
                 .Where(type => type.IsClass)
                 .ToDictionary(t=>t.Name, t => t);
         }
         
-        public IEnumerable<IStep<IAggregate, IAggregate>> Get(Settings settings)
+        public IEnumerable<IStep> Get(Settings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
 
@@ -40,9 +40,7 @@ namespace FileOps.Pipe
             return GetCorrectTypesAndData(settings);
         }
 
-
-
-        private IEnumerable<IStep<IAggregate, IAggregate>> GetCorrectTypesAndData(Settings settings)
+        private IEnumerable<IStep> GetCorrectTypesAndData(Settings settings)
         {
             foreach (Settings.Step step in settings.Pipe)
             {
@@ -87,7 +85,7 @@ namespace FileOps.Pipe
                     throw new ArgumentException($"Error at building pipe for step {settings.Identifier} - {step.StepName}",ex);
                 }
 
-                yield return Activator.CreateInstance(stepType, constructorParameterInstance) as IStep<IAggregate, IAggregate>;
+                yield return Activator.CreateInstance(stepType, constructorParameterInstance) as IStep;
             }
         }
 

@@ -1,0 +1,39 @@
+{
+  "Common": [
+    {
+      "Name": "DefaultSource",
+      "StepSettings": {
+        "Type": "sftp",
+        "Host": "127.0.0.1",
+        "Port": 22,
+        "UserName": "ec2-user",
+        "Path": "/home/ec2-user/From",
+        "PrivateKey": "Common\\key.private"
+      }
+    },
+    {
+      "Name": "EmptySource",
+      "StepSettings": {
+        "Type": "sftp",
+        "Host": "127.0.0.1",
+        "Port": 22,
+        "UserName": "ec2-user",
+        "Path": "/home/ec2-user/Empty",
+        "PrivateKey": "Common\\key.private"
+      }
+    },
+    {
+      "Name": "DefaultTarget",
+      "StepSettings": {
+        "Type": "sftp",
+        "Host": "127.0.0.1",
+        "Port": 22,
+        "UserName": "ec2-user",
+        "Path": "/home/ec2-user/To",
+        "PrivateKey": "Common\\key.private"
+      }
+    }
+  ]
+}
+
+ 
